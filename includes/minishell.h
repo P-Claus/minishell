@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/10 12:06:52 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/10 12:24:14 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef enum e_redir_type
 	R_OUT,
 	R_APND,
 	R_HERE,
+	R_HERE_NO_EXP,
 }	t_redir_type;
 
 typedef enum e_lexing_state

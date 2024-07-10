@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 16:48:52 by efret             #+#    #+#             */
-/*   Updated: 2024/06/13 11:40:48 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/10 12:24:22 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ void	add_new_redir_node(t_redir **redirs, t_token **tokens)
 		flags = R_IN;
 	else if (exact_match(redir_op, ">"))
 		flags = R_OUT;
+	else if (exact_match(redir_op, "<<")
+		&& ((*tokens)->tag == SINGLE_Q || (*tokens)->tag == DOUBLE_Q))
+		flags = R_HERE_NO_EXP;
 	else if (exact_match(redir_op, "<<"))
 		flags = R_HERE;
 	else if (exact_match(redir_op, ">>"))
