@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:27:03 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/11 12:25:36 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/11 18:16:35 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,13 @@ void	calculate_start_and_end(char **string, int *start, int *end)
 	i = 0;
 	while ((*string)[i] != '\0')
 	{
-		if ((*string)[i] == '$')
+		if ((*string)[i] == '$' && (*string)[i + 1] == '?')
+		{
+			*start = i;
+			*end = i + 2;
+			return ;
+		}
+		else if ((*string)[i] == '$')
 		{
 			*start = i;
 			while (ft_isalnum((*string)[i]) || (*string)[i] == '_'
@@ -59,8 +65,9 @@ char	*get_expanded_string(int start, char **string, char *env_value,
 		return (NULL); //malloc failure
 	ft_strlcpy(expanded_string, *string, start + 1);
 	ft_strlcat(expanded_string, string_to_expand, total_len + 1);
-	ft_strlcat(expanded_string, *string + start
-			+ ft_strlen(trimmed_parameter), total_len + 1);
+	ft_strlcat(expanded_string, *string + start + ft_strlen(trimmed_parameter),
+			total_len + 1);
+	free(string_to_expand);
 	return (expanded_string);
 }
 
@@ -81,7 +88,7 @@ static char	*get_env_value(t_var *env, char *name)
 	return ("");
 }
 
-void	expand_double_quotes(char **string, t_minishell *shell)
+void	expand_string(char **string, t_minishell *shell)
 {
 	char	*trimmed_parameter;
 	char	*expanded_string;
@@ -93,7 +100,11 @@ void	expand_double_quotes(char **string, t_minishell *shell)
 	{
 		calculate_start_and_end(string, &start, &end);
 		trimmed_parameter = get_trimmed_parameter(start, end, string);
-		env_value = get_env_value(shell->env, trimmed_parameter + 1);
+		printf("The trim is: %s\n", trimmed_parameter);
+		if (exact_match(trimmed_parameter, "$?"))
+			env_value = ft_itoa((int)g_shell_stats.prev_exit);
+		else
+			env_value = get_env_value(shell->env, trimmed_parameter + 1);
 		expanded_string = get_expanded_string(start, string, env_value,
 				trimmed_parameter);
 		free(*string);
@@ -102,27 +113,17 @@ void	expand_double_quotes(char **string, t_minishell *shell)
 	}
 }
 
-static void	expand_dollar_question(char	**string)
-{
-	char	*string_to_expand;
-	char	*prev_exit_status;
-
-	prev_exit_status = ft_itoa((int)g_shell_stats.prev_exit);
-	string_to_expand = ft_strdup(prev_exit_status);
-	free(*string);
-	*string = string_to_expand;
-}
-
 void	process_token(char **string, t_minishell *shell)
 {
-	printf("The string is: %s\n", *string);
-	if (((*string)[0] == '$' && (*string)[1] == '?') || ((*string)[0] == '"'
-			&& (*string)[1] == '$' && (*string)[2] == '?'
-			&& (*string)[3] == '"'))
-		expand_dollar_question(string);
-	else if (((*string)[0] == '"' && ft_strchr(*string, '$'))
-				|| (*string)[0] == '$')
-		expand_double_quotes(string, shell);
+	int	iter;
+
+	iter = 0;
+	while ((*string)[iter] && (*string)[iter] != '\0')
+	{
+		if ((*string)[iter] == '"' || (*string)[iter] == '$')
+			expand_string(string, shell);
+		iter++;
+	}
 }
 
 void	expand_parameters(t_token **token, t_minishell *shell)
@@ -132,9 +133,7 @@ void	expand_parameters(t_token **token, t_minishell *shell)
 	iter = *token;
 	while (iter)
 	{
-		//process_token(&iter->str, shell);
-		if (iter->tag != SINGLE_Q)
-			expand_double_quotes(&iter->str, shell);
+		process_token(&iter->str, shell);
 		if (iter->next)
 			iter = iter->next;
 		else

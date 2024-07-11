@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/11 12:25:19 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/11 16:56:54 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	read_here_doc(t_minishell *shell, int pipe_fd[2], t_redir *redir, bool expa
 		if (exact_match(line, redir->str))
 			break ;
 		if (expand)
-			expand_double_quotes(&line, shell);
+			process_token(&line, shell);
 		write(pipe_fd[PIPE_W], line, ft_strlen(line));
 		write(pipe_fd[PIPE_W], "\n", 1);
 		free(line);
