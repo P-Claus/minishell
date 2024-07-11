@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 17:38:48 by efret             #+#    #+#             */
-/*   Updated: 2024/07/11 15:05:00 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/11 15:41:08 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static void	envp_add_var(char **ret_var, t_var *list_var)
 	value = ft_strjoin(tmp, list_var->value);
 	if (!value)
 		(free(tmp), old_exit_handler(1));
+	free(tmp);
 	*ret_var = value;
 }
 
