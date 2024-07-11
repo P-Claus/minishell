@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/11 10:49:51 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/11 11:31:48 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,10 @@ void	ft_wait(pid_t cpid)
 	{
 		pid = waitpid(cpid, &wstat, 0);
 		status_stuff(cpid, pid, wstat);
+	}
+	else if (errno == ECHILD)
+	{
+		errno = 0;
 	}
 	g_shell_stats.process_is_running = 0;
 }
@@ -181,21 +185,25 @@ void	do_redirs(t_cmd *cmd)
 	}
 }
 
-void	close_redirs(t_cmd *cmd)
+void	close_redirs(t_cmd *cmds)
 {
+	t_cmd	*cmd;
 	t_redir	*redirs;
 
-	redirs = cmd->redirs;
-	while (redirs)
+	cmd = cmds;
+	while (cmd)
 	{
-		if (redirs->flags)
-			; // No need to do anything, pipe end should be closed already.
-		else
+		redirs = cmd->redirs;
+		while (redirs)
 		{
-			close(redirs->fd);
-			redirs->fd = false;
+			if (redirs->fd > 0)
+			{
+				close(redirs->fd);
+				redirs->is_fd = false;
+			}
+			redirs = redirs->next;
 		}
-		redirs = redirs->next;
+		cmd = cmd->next;
 	}
 }
 

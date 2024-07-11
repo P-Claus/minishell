@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:45:03 by efret             #+#    #+#             */
-/*   Updated: 2024/07/08 17:53:29 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/11 11:32:05 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ void	interactive(t_minishell *shell)
 			print_cmd_list(cmds);
 			printf("\nCommand output:\n");
 			ft_run_cmds(cmds, shell);
+			close_redirs(cmds);
 			free_cmds(&cmds);
 			free_tokens(&tokens);
 		}
