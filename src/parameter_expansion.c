@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:27:03 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/11 18:28:25 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/11 18:35:10 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static char	*get_env_value(t_var *env, char *name)
 		trimmed_name = ft_strtrim(trimmed_name, "}");
 	}
 	node = env_search_name(env, trimmed_name);
-	if (node)
+	if (node && node->value)
 		return (node->value);
 	return ("");
 }
