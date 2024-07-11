@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/08 20:15:17 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/11 10:49:51 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,11 @@ void	put_here_doc_warning(char *delim)
 	ft_putendl_fd("')", STDERR_FILENO);
 }
 
-void	read_here_doc(int pipe_fd[2], t_redir *redir)
+void	read_here_doc(t_minishell *shell, int pipe_fd[2], t_redir *redir, bool expand)
 {
 	char	*line;
 
+	(void)shell;
 	handle_sigint_heredoc();
 	close(pipe_fd[PIPE_R]);
 	line = readline("> ");
@@ -86,6 +87,8 @@ void	read_here_doc(int pipe_fd[2], t_redir *redir)
 	{
 		if (exact_match(line, redir->str))
 			break ;
+		if (expand)
+			process_token(&line, shell);
 		write(pipe_fd[PIPE_W], line, ft_strlen(line));
 		write(pipe_fd[PIPE_W], "\n", 1);
 		free(line);
@@ -99,7 +102,7 @@ void	read_here_doc(int pipe_fd[2], t_redir *redir)
 	exit(errno);
 }
 
-void	here_doc_fork(int pipe_fd[2], t_redir *redir)
+void	here_doc_fork(t_minishell *shell, int pipe_fd[2], t_redir *redir, bool expand)
 {
 	int	cpid;
 
@@ -107,13 +110,13 @@ void	here_doc_fork(int pipe_fd[2], t_redir *redir)
 	if (cpid == -1)
 		exit_handler(1);
 	if (!cpid)
-		read_here_doc(pipe_fd, redir);
+		read_here_doc(shell, pipe_fd, redir, expand);
 	g_shell_stats.cmd_pid = cpid;
 	close(pipe_fd[PIPE_W]);
 	ft_wait(cpid);
 }
 
-void	parse_here_docs(t_cmd *cmds, int pipe_fd[2])
+void	parse_here_docs(t_minishell *shell, t_cmd *cmds, int pipe_fd[2])
 {
 	t_redir	*redirs;
 
@@ -122,14 +125,15 @@ void	parse_here_docs(t_cmd *cmds, int pipe_fd[2])
 		redirs = cmds->redirs;
 		while (redirs)
 		{
-			if (redirs->flags == R_HERE)
+			if (redirs->flags == R_HERE || redirs->flags == R_HERE_NO_EXP)
 			{
 				g_shell_stats.process_is_running = 1;
 				if (pipe(pipe_fd) == -1)
 					exit_handler(1); // Error handling
-				here_doc_fork(pipe_fd, redirs);
+				here_doc_fork(shell, pipe_fd, redirs, redirs->flags == R_HERE);
 				if (g_shell_stats.prev_exit)
 					return ; // Should close some fds?
+				redirs->flags = R_HERE;
 				redirs->fd = pipe_fd[PIPE_R];
 				redirs->is_fd = true;
 			}
@@ -219,7 +223,7 @@ void	ft_run_cmds(t_cmd *cmds, t_minishell *shell)
 
 	// copy to restore stdin for later. Maybe need to do this for the other std streams as well.
 	g_shell_stats.prev_exit = 0;
-	parse_here_docs(cmds, pipe_fd);
+	parse_here_docs(shell, cmds, pipe_fd);
 	if (g_shell_stats.prev_exit)
 		return ;
 	stdin_copy = dup(STDIN_FILENO);
