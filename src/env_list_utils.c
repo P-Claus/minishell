@@ -6,11 +6,19 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 13:39:36 by efret             #+#    #+#             */
-/*   Updated: 2024/06/27 14:04:41 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/11 14:48:08 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	free_env(t_var **env)
+{
+	if (!env || !*env)
+		return ;
+	while (*env)
+		env_del_target(env, *env);
+}
 
 t_var	*create_env_var(char *name, char *val, bool is_exp)
 {

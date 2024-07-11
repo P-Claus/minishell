@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 16:48:52 by efret             #+#    #+#             */
-/*   Updated: 2024/07/10 12:24:22 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/11 15:05:12 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ size_t	count_cmd_av(t_token *tokens)
 		else if (tokens->next)
 			tokens = tokens->next;
 		else
-			(printf("Welp\n"), exit_handler(1)); // Unfinished Redirect, maybe better to catch while pre_parsing?
+			(printf("Welp\n"), old_exit_handler(1)); // Unfinished Redirect, maybe better to catch while pre_parsing?
 		tokens = tokens->next;
 	}
 	return (count);
@@ -54,7 +54,7 @@ void	add_new_redir_node(t_redir **redirs, t_token **tokens)
 		flags = R_APND;
 	redir = create_redir(redir_name, flags);
 	if (!redir)
-		exit_handler(errno);//handle malloc error
+		old_exit_handler(errno);//handle malloc error
 	redir_add_back(redirs, redir);
 }
 
@@ -87,15 +87,15 @@ void	make_cmd_list(t_cmd **cmds, t_token *tokens)
 		redirs = NULL;
 		count_av = count_cmd_av(tokens);
 		if (!count_av)
-			(printf("Only redir info\n"), exit_handler(1)); //error, only redirect info
+			(printf("Only redir info\n"), old_exit_handler(1)); //error, only redirect info
 		cmd_av = malloc(sizeof(char *) * (count_av + 1));
 		if (!cmd_av)
-			exit_handler(1); //malloc failure
+			old_exit_handler(1); //malloc failure
 		cmd_av[count_av] = NULL;
 		fill_cmd_content(cmd_av, &redirs, &tokens);
 		cmd_node = create_cmd(cmd_av, redirs);
 		if (!cmd_node)
-			exit_handler(errno); //again malloc failure
+			old_exit_handler(errno); //again malloc failure
 		cmd_add_back(cmds, cmd_node);
 		if (tokens)
 			tokens = tokens->next;

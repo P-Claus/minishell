@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 13:56:40 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/08 19:01:57 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/11 15:12:02 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_token	*lexer(char *line, t_minishell *shell)
 		else if (lexeme.lexing_state == START)
 			break ;
 		else
-		 	exit_handler(1);
+			old_exit_handler(1);
 	}
 	parser(&lexeme.head);
 	expand_parameters(&lexeme.head, shell);

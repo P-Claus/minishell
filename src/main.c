@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:43 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/08 17:58:43 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/11 15:04:45 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	shell_lvl(t_minishell *shell)
 	{
 		var = env_add_var2(&shell->env, "SHLVL", "1", true);
 		if (!var)
-			exit_handler(1); // error
+			old_exit_handler(1); // error
 		return ;
 	}
 	lvl = ft_atoi(var->value) + 1;
@@ -91,7 +91,7 @@ void	shell_lvl(t_minishell *shell)
 		return ;
 	var = env_add_var2(&shell->env, "SHLVL", tmp, true);
 	if (!var)
-		exit_handler(1);// error Handling
+		old_exit_handler(1);// error Handling
 	return (free(tmp));
 }
 
@@ -111,11 +111,11 @@ void	init_pwd(t_minishell *shell)
 
 	pwd_val = getcwd(NULL, 0);
 	if (!pwd_val)
-		exit_handler(1); // Error
+		old_exit_handler(1); // Error
 	var = env_add_var2(&shell->env, "PWD", pwd_val, true);
 	free(pwd_val);
 	if (!var)
-		exit_handler(1); // Error
+		old_exit_handler(1); // Error
 }
 
 void	init_path(t_minishell *shell)
@@ -149,7 +149,7 @@ int	main(int ac, char **av, char **envp)
 	if (ac == 2)
 		non_interactive(av[1], &shell);
 	if (ac > 2)
-		exit_handler(0);
+		old_exit_handler(0);
 	load_rc(".minishellrc", &shell);
 	interactive(&shell);
 	return (0);

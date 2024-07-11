@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 19:40:59 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/11 11:31:51 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/11 15:06:07 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,14 +129,14 @@ static void	builtin_cd_no_arg(t_minishell *shell)
 	if (!home_node)
 	{
 		printf("cd: HOME not set\n");
-		exit_handler(1); //error handling
+		old_exit_handler(1); //error handling
 	}
 	if (chdir(home_node->value))
 	{
 		if (errno == 2)
 			printf("No such file or directory\n");
 		g_shell_stats.prev_exit = 1;
-		exit_handler(1); //error handling
+		old_exit_handler(1); //error handling
 	}
 	pwd_node = env_search_name(shell->env, "PWD");
 	if (pwd_node)
@@ -155,11 +155,11 @@ static void	builtin_cd_arg(t_cmd *cmd, t_minishell *shell)
 		if (errno == 2)
 			printf("No such file or directory\n");
 		g_shell_stats.prev_exit = 1;
-		exit_handler(1); //error handling
+		old_exit_handler(1); //error handling
 	}
 	pwd_value = getcwd(NULL, 0);
 	if (!pwd_value)
-		exit_handler(1);//error handling
+		old_exit_handler(1);//error handling
 	pwd_node = env_search_name(shell->env, "PWD");
 	if (pwd_node)
 		env_add_var2(&shell->env, "OLDPWD", pwd_node->value, true);
@@ -205,12 +205,12 @@ static void	builtin_wrapper(int (*func)(t_cmd *, t_minishell *), t_cmd *cmd,
 
 	stdout_copy = dup(STDOUT_FILENO);
 	if (cmd->next && dup2(pipe_fd[PIPE_W], STDOUT_FILENO) == -1)
-		exit_handler(1); //error
+		old_exit_handler(1); //error
 	do_redirs(cmd);
 	g_shell_stats.prev_exit = func(cmd, shell);
 	close(pipe_fd[PIPE_W]);
 	if (dup2(pipe_fd[PIPE_R], STDIN_FILENO) == -1 || close(pipe_fd[PIPE_R]))
-		exit_handler(1);
+		old_exit_handler(1);
 	if (dup2(stdout_copy, STDOUT_FILENO) == -1 || close(stdout_copy))
-		exit_handler(1);
+		old_exit_handler(1);
 }
