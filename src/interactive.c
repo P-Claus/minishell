@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:45:03 by efret             #+#    #+#             */
-/*   Updated: 2024/07/11 15:00:49 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/11 17:04:19 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ void	interactive(t_minishell *shell)
 	while (1)
 	{
 		if (g_shell_stats.prev_exit)
-			prompt = "\033[31m->\033[0m minishell> ";
+			prompt = "\001\033[31m\002->\001\033[0m\002 minishell> ";
 		else
-			prompt = "\033[32m->\033[0m minishell> ";
+			prompt = "\001\033[32m\002->\001\033[0m\002 minishell> ";
 		cmds = NULL;
 		line = readline(prompt);
 		if (!line)
