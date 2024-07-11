@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:27:03 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/11 18:16:35 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/11 18:28:25 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,8 @@ void	expand_parameters(t_token **token, t_minishell *shell)
 	iter = *token;
 	while (iter)
 	{
-		process_token(&iter->str, shell);
+		if (!(iter->tag == SINGLE_Q))
+			process_token(&iter->str, shell);
 		if (iter->next)
 			iter = iter->next;
 		else
