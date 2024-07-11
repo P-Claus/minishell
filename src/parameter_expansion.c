@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:27:03 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/11 08:56:13 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/11 12:25:36 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static char	*get_env_value(t_var *env, char *name)
 	return ("");
 }
 
-static void	expand_double_quotes(char **string, t_minishell *shell)
+void	expand_double_quotes(char **string, t_minishell *shell)
 {
 	char	*trimmed_parameter;
 	char	*expanded_string;
@@ -132,7 +132,9 @@ void	expand_parameters(t_token **token, t_minishell *shell)
 	iter = *token;
 	while (iter)
 	{
-		process_token(&iter->str, shell);
+		//process_token(&iter->str, shell);
+		if (iter->tag != SINGLE_Q)
+			expand_double_quotes(&iter->str, shell);
 		if (iter->next)
 			iter = iter->next;
 		else

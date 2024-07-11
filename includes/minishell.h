@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/11 10:49:34 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/11 12:25:49 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,7 @@ int		check_for_builtins(t_cmd *cmd, t_minishell *shell, int pipe_fd[2]);
 void	tokenizer(char *line);
 t_token	*lexer(char *line, t_minishell *shell);
 void	process_token(char **string, t_minishell *shell);
+void	expand_double_quotes(char **string, t_minishell *shell);
 void	handle_single_quotes(t_lexeme *lexeme, char *line, int *index);
 void	handle_unquoted(t_lexeme *lexeme, char *line, int *index);
 void	update_lexer_state(t_lexeme *lexeme, char *line, int *index);
