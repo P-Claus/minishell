@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 19:09:58 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/08 09:21:19 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/12 08:26:51 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	determine_quote_type(t_token *token)
 void	determine_token_type(t_token *token, int iter)
 {
 	if ((token->str[0] == '\'' && token->str[ft_strlen(token->str) - 1] == '\'')
-		|| (token->str[0] == '"' && token->str[ft_strlen(token->str) - 1] == '"'))
+		|| (token->str[0] == '"' && token->str[ft_strlen(token->str)
+				- 1] == '"'))
 		determine_quote_type(token);
 	else if ((ft_strchr(token->str, '=') && ft_strchr(token->str, '\'')))
 	{
@@ -60,10 +61,10 @@ void	parser(t_token **token)
 		if ((ft_strnstr(iter->str, "|", 1) != NULL))
 			iter->tag = PIPE;
 		else if ((ft_strnstr(iter->str, "<", 1) != NULL)
-				|| (ft_strnstr(iter->str, ">", 1) != NULL)
-				|| (ft_strnstr(iter->str, "<<", 2) != NULL)
-				|| (ft_strnstr(iter->str, ">>", 2) != NULL)
-				|| (ft_strnstr(iter->str, "END", 3) != NULL))
+			|| (ft_strnstr(iter->str, ">", 1) != NULL)
+			|| (ft_strnstr(iter->str, "<<", 2) != NULL)
+			|| (ft_strnstr(iter->str, ">>", 2) != NULL)
+			|| (ft_strnstr(iter->str, "END", 3) != NULL))
 			iter->tag = REDIRECT;
 		else
 			determine_token_type(iter, 0);

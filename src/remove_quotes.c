@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 09:23:16 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/08 15:57:37 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/12 08:59:08 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,46 +39,44 @@ void	remove_quotes_from_quoted_string(t_token **token)
 	}
 }
 
+static void	process_tokens_to_remove_quotes(char **string)
+{
+	int		i;
+	int		len;
+	char	*trimmed_string;
+
+	i = 0;
+	while ((*string)[i] != '\0')
+	{
+		if ((*string)[i] == '=' && ((*string)[i + 1] == '\'' || (*string)[i
+				+ 1] == '"'))
+		{
+			len = ft_strlen(*string) - 2;
+			trimmed_string = malloc(len * sizeof(char));
+			if (!trimmed_string)
+				return ;//malloc failure
+			ft_memcpy(trimmed_string, *string, i + 1);
+			ft_memcpy(trimmed_string + ft_strlen(trimmed_string), (*string) + i
+				+ 2, ft_strlen(*string) + i - 3);
+			free(*string);
+			*string = trimmed_string;
+		}
+		i++;
+	}
+}
+
 void	remove_quotes_from_variables(t_token **token)
 {
 	t_token	*iter;
-	int	str_iter;
-	char	*trimmed_string;
-	int	len;
 
 	iter = *token;
 	while (iter)
 	{
 		if (ft_strchr(iter->str, '\'') || ft_strchr(iter->str, '"'))
-		{
-			str_iter = 0;
-			while (iter->str[str_iter] != '\0')
-			{
-				if(iter->str[str_iter] == '=' && (iter->str[str_iter + 1] == '\'' || iter->str[str_iter + 1] == '"'))
-				{
-					len = ft_strlen(iter->str) - 2;
-					trimmed_string = malloc(len * sizeof(char *));
-					if (!trimmed_string)
-						return ; //failed malloc
-					ft_memcpy(trimmed_string, iter->str, str_iter + 1);
-					ft_memcpy(trimmed_string + ft_strlen(trimmed_string), iter->str +str_iter + 2, ft_strlen(iter->str) - str_iter - 3);
-					free(iter->str);
-					iter->str = trimmed_string;
-
-				}
-				str_iter++;
-			}
-		}
+			process_tokens_to_remove_quotes(&iter->str);
 		if (iter->next)
 			iter = iter->next;
 		else
 			break ;
 	}
 }
-
-/*
-void	remove_quotes(t_token **token)
-{
-
-}
-*/
