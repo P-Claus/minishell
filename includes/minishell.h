@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/11 12:25:49 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/12 08:58:36 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,12 +126,13 @@ extern t_shell_stats	g_shell_stats;
 void	interactive(t_minishell *shell);
 
 /*	BUILTINS	*/
-int		builtin_env(t_var **env);
-int		builtin_pwd(t_var *env);
-int		builtin_cd(t_var *env);
-int		builtin_echo(char **strings_to_echo);
-void	builtin_unset(t_var *env, char *var_to_delete);
-void	builtin_export(t_var **env, char *name_to_export, char *value_to_export);
+int		new_cd(t_cmd *cmd, t_minishell *shell);
+int		new_pwd(t_cmd *cmd, t_minishell *shell);
+int		new_echo(t_cmd *cmd, t_minishell *shell);
+int		new_env(t_cmd *cmd, t_minishell *shell);
+int		new_unset(t_cmd *cmd, t_minishell *shell);
+int		new_export(t_cmd *cmd, t_minishell *shell);
+
 void	builtin_exit(void);
 
 /*	UTILS	*/
@@ -141,6 +142,13 @@ int		is_regular_character(char c);
 int		is_meta_character(char c);
 void	reset_lexer_state(t_lexeme *lexeme, t_lexing_state lexing_state);
 int		ft_strjoin_char(char **str, char c);
+void	calculate_start_and_end(char **string, int *start, int *end);
+char	*get_trimmed_parameter(int start, int end, char **string);
+char	*get_expanded_string(int start, char **string, char *env_value,
+		char *trimmed_parameter);
+char	*get_env_value(t_var *env, char *name);
+void	expand_string(char **string, t_minishell *shell);
+
 /*	LINKED LIST FUNCTIONS	*/
 t_token	*create_token(char *string);
 void	add_token_to_end(t_token **head, t_token *new_token);
@@ -174,7 +182,6 @@ void	env_update_export(t_minishell *shell);
 
 /*	SRC	*/
 int		check_for_builtins(t_cmd *cmd, t_minishell *shell, int pipe_fd[2]);
-void	tokenizer(char *line);
 t_token	*lexer(char *line, t_minishell *shell);
 void	process_token(char **string, t_minishell *shell);
 void	expand_double_quotes(char **string, t_minishell *shell);

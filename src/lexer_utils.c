@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 10:18:56 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/07 14:38:28 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/11 19:47:55 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void	update_lexer_state(t_lexeme *lexeme, char *line, int *index)
 
 int	is_regular_character(char c)
 {
-	if ((c == '!') || (c == '#') || (c == '%') || (c >='*' && c <= ':') || (c == '=') || (c == '?')
-		|| (c >= 'A' && c <= 'Z') || (c == '^') || (c >= 'a' && c <= 'z')
-		|| (c == '~'))
+	if ((c == '!') || (c == '#') || (c == '%') || (c >= '*' && c <= ':')
+		|| (c == '=') || (c == '?') || (c >= 'A' && c <= 'Z') || (c == '^')
+		|| (c >= 'a' && c <= 'z') || (c == '~'))
 		return (1);
 	else
 		return (0);
@@ -55,7 +55,8 @@ void	reset_lexer_state(t_lexeme *lexeme, t_lexing_state lexing_state)
 
 int	handle_unexpected_token(char *line, int index, char ascii_code)
 {
-	if ((line[index] == ascii_code) && (line[index - 1] == ascii_code) && (line[index - 2] == ascii_code))
+	if ((line[index] == ascii_code) && (line[index - 1] == ascii_code)
+		&& (line[index - 2] == ascii_code))
 	{
 		printf("syntax error near unexpected token `%c\n", line[index]);
 		return (1);
