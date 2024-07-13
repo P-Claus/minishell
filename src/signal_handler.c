@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:09:16 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/08 19:35:27 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/13 11:58:22 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	custom_sigint_handler_function(int signal)
 		write(1, "\n", 1);
 		g_shell_stats.prev_exit = EOWNERDEAD;
 		rl_replace_line("", 0);
-		rl_set_prompt("\033[31m->\033[0m minishell> ");// Only needed for the red arrow
+		rl_set_prompt("\001\033[31m\002->\001\033[0m\002 minishell> ");
 		rl_on_new_line();
 		rl_redisplay();
 	}
