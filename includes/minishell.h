@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/13 11:36:29 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/13 12:48:38 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ size_t	count_cmd_av(t_token *tokens);
 void	make_cmd_list(t_cmd **cmds, t_token *tokens);
 void	do_redirs(t_cmd *cmd);
 void	close_redirs(t_cmd *cmd);
-void	ft_run_cmds(t_cmd *cmds, t_minishell *shell);
+int		ft_run_cmds(t_cmd *cmds, t_minishell *shell);
 char	*cmd_find_path(char *cmd_name, t_var *env_list);
 
 /* ENVIRONMENT VARIABLE */
