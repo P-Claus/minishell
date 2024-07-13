@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/11 16:56:54 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/13 11:43:52 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	here_doc_fork(t_minishell *shell, int pipe_fd[2], t_redir *redir, bool expa
 
 	cpid = fork();
 	if (cpid == -1)
-		exit_handler(1);
+		old_exit_handler(1);
 	if (!cpid)
 		read_here_doc(shell, pipe_fd, redir, expand);
 	g_shell_stats.cmd_pid = cpid;
@@ -133,7 +133,7 @@ void	parse_here_docs(t_minishell *shell, t_cmd *cmds, int pipe_fd[2])
 			{
 				g_shell_stats.process_is_running = 1;
 				if (pipe(pipe_fd) == -1)
-					exit_handler(1); // Error handling
+					old_exit_handler(1); // Error handling
 				here_doc_fork(shell, pipe_fd, redirs, redirs->flags == R_HERE);
 				if (g_shell_stats.prev_exit)
 					return ; // Should close some fds?
@@ -158,27 +158,27 @@ void	do_redirs(t_cmd *cmd)
 		if (redirs->flags == R_HERE && redirs->is_fd)
 		{
 			if (dup2(redirs->fd, STDIN_FILENO) == -1)
-				exit_handler(1);
+				old_exit_handler(1);
 			close(redirs->fd);
 		}
 		else
 		{
 			fd = open_file(redirs->str, redirs->flags);
 			if (errno)
-				exit_handler(1);
+				old_exit_handler(1);
 			if (redirs->flags == R_IN)
 			{
 				redirs->fd = fd;
 				redirs->is_fd = true;
 				if (dup2(fd, STDIN_FILENO) == -1)
-					exit_handler(1);
+					old_exit_handler(1);
 			}
 			else
 			{
 				redirs->fd = fd;
 				redirs->is_fd = true;
 				if (dup2(fd, STDOUT_FILENO) == -1)
-					exit_handler(1);
+					old_exit_handler(1);
 			}
 		}
 		redirs = redirs->next;
@@ -213,14 +213,14 @@ static void	ft_execve(t_cmd *cmd, int pipe_fd[2], t_minishell *shell)
 
 	handle_sigquit_child();
 	if (cmd->next && dup2(pipe_fd[PIPE_W], STDOUT_FILENO) == -1)
-		exit_handler(1); // error
+		old_exit_handler(1); // error
 	close(pipe_fd[PIPE_W]);
 	do_redirs(cmd);
 	cmd_path = cmd_find_path(cmd->cmd_av[0], shell->env);
 	if (!cmd_path)
-		(printf("CMD NOT FOUND\n"), exit_handler(1));
+		(printf("CMD NOT FOUND\n"), old_exit_handler(1));
 	execve(cmd_path, cmd->cmd_av, shell->export_env);
-	exit_handler(1); // reached if execve (execpv) had an error.
+	old_exit_handler(1); // reached if execve (execpv) had an error.
 }
 
 void	ft_run_cmds(t_cmd *cmds, t_minishell *shell)
@@ -239,7 +239,7 @@ void	ft_run_cmds(t_cmd *cmds, t_minishell *shell)
 	while (cmds && g_shell_stats.process_is_running)
 	{
 		if (pipe(pipe_fd) == -1)
-			exit_handler(1);
+			old_exit_handler(1);
 		if (check_for_builtins(cmds, shell, pipe_fd))
 		{
 			if (!g_shell_stats.prev_exit)
@@ -250,17 +250,17 @@ void	ft_run_cmds(t_cmd *cmds, t_minishell *shell)
 		}
 		cpid = fork();
 		if (cpid == -1)
-			exit_handler(1);
+			old_exit_handler(1);
 		if (!cpid)
 			ft_execve(cmds, pipe_fd, shell);
 		g_shell_stats.cmd_pid = cpid;
 		close(pipe_fd[PIPE_W]);
 		if (dup2(pipe_fd[PIPE_R], STDIN_FILENO) == -1)
-			exit_handler(1);
+			old_exit_handler(1);
 		close(pipe_fd[PIPE_R]);
 		cmds = cmds->next;
 	}
 	ft_wait(cpid);
 	if (dup2(stdin_copy, STDIN_FILENO) == -1 || close(stdin_copy))
-		exit_handler(1);
+		old_exit_handler(1);
 }

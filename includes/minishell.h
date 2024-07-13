@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/12 08:58:36 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/13 11:36:29 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,8 @@ void	builtin_exit(void);
 
 /*	UTILS	*/
 bool	exact_match(char *s, char *to_match);
-void	exit_handler(int status);
+void	old_exit_handler(int status);
+void	exit_handler(t_minishell *shell, int status);
 int		is_regular_character(char c);
 int		is_meta_character(char c);
 void	reset_lexer_state(t_lexeme *lexeme, t_lexing_state lexing_state);
@@ -157,12 +158,10 @@ t_cmd	*create_cmd(char **cmd_av, t_redir *redirs);
 void	cmd_add_back(t_cmd **head, t_cmd *new_node);
 t_redir	*create_redir(char *str, int flags);
 void	redir_add_back(t_redir **head, t_redir *new_node);
-void	free_tokens(t_token **tokens);
 
 /* COMMANDS */
 size_t	count_cmd_av(t_token *tokens);
 void	make_cmd_list(t_cmd **cmds, t_token *tokens);
-void	free_cmds(t_cmd **cmds);
 void	do_redirs(t_cmd *cmd);
 void	close_redirs(t_cmd *cmd);
 void	ft_run_cmds(t_cmd *cmds, t_minishell *shell);
@@ -179,6 +178,13 @@ t_var	*env_add_var(t_var **head, char *token, bool is_exp);
 t_var	*env_add_var_only(t_var **env, char *name, bool is_exp);
 char	**make_export_envp(t_var *env_list);
 void	env_update_export(t_minishell *shell);
+
+/* FREE UTILS */
+void	free_minishell(t_minishell *shell);
+void	free_tokens(t_token **tokens);
+void	free_cmds(t_cmd **cmds);
+void	free_env(t_var **env);
+void	free_env_export(char ***exp);
 
 /*	SRC	*/
 int		check_for_builtins(t_cmd *cmd, t_minishell *shell, int pipe_fd[2]);

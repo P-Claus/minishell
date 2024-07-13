@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:45:03 by efret             #+#    #+#             */
-/*   Updated: 2024/07/11 16:50:53 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/13 11:44:07 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	interactive(t_minishell *shell)
 		cmds = NULL;
 		line = readline(prompt);
 		if (!line)
-			exit_handler(errno);//to handle when control D is entered (= EOT)
+			exit_handler(shell, errno);//to handle when control D is entered (= EOT)
 		if (line && *line)
 		{
 			add_history(line);
@@ -98,5 +98,6 @@ void	interactive(t_minishell *shell)
 		}
 		free(line);
 	}
-	exit_handler(0);
+	free_minishell(shell);
+	exit_handler(shell, 0);
 }

@@ -6,14 +6,28 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 19:40:59 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/11 19:34:36 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/13 11:41:36 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 static void	builtin_wrapper(int (*func)(t_cmd *, t_minishell *), t_cmd *cmd,
-				t_minishell *shell, int pipe_fd[2]);
+		t_minishell *shell, int pipe_fd[2])
+{
+	int	stdout_copy;
+
+	stdout_copy = dup(STDOUT_FILENO);
+	if (cmd->next && dup2(pipe_fd[PIPE_W], STDOUT_FILENO) == -1)
+		old_exit_handler(1); //error
+	do_redirs(cmd);
+	g_shell_stats.prev_exit = func(cmd, shell);
+	close(pipe_fd[PIPE_W]);
+	if (dup2(pipe_fd[PIPE_R], STDIN_FILENO) == -1 || close(pipe_fd[PIPE_R]))
+		old_exit_handler(1);
+	if (dup2(stdout_copy, STDOUT_FILENO) == -1 || close(stdout_copy))
+		old_exit_handler(1);
+}
 
 int	check_for_builtins(t_cmd *cmd, t_minishell *shell, int pipe_fd[2])
 {
@@ -35,21 +49,4 @@ int	check_for_builtins(t_cmd *cmd, t_minishell *shell, int pipe_fd[2])
 	else
 		return (0);
 	return (1);
-}
-
-static void	builtin_wrapper(int (*func)(t_cmd *, t_minishell *), t_cmd *cmd,
-		t_minishell *shell, int pipe_fd[2])
-{
-	int	stdout_copy;
-
-	stdout_copy = dup(STDOUT_FILENO);
-	if (cmd->next && dup2(pipe_fd[PIPE_W], STDOUT_FILENO) == -1)
-		exit_handler(1); //error
-	do_redirs(cmd);
-	g_shell_stats.prev_exit = func(cmd, shell);
-	close(pipe_fd[PIPE_W]);
-	if (dup2(pipe_fd[PIPE_R], STDIN_FILENO) == -1 || close(pipe_fd[PIPE_R]))
-		exit_handler(1);
-	if (dup2(stdout_copy, STDOUT_FILENO) == -1 || close(stdout_copy))
-		exit_handler(1);
 }

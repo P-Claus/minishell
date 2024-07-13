@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 13:56:40 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/11 19:41:03 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/13 11:46:52 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	update_and_process_lexer(t_lexeme *lexeme, char *line, int *index)
 		else if (lexeme->lexing_state == START)
 			break ;
 		else
-			exit_handler(1);
+			old_exit_handler(1);
 	}
 }
 

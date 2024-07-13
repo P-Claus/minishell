@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:36:12 by efret             #+#    #+#             */
-/*   Updated: 2024/07/05 20:00:51 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/11 16:00:50 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_var	*env_add_var2(t_var **head, char *name, char *value, bool is_exp)
 		if (node->value)
 			free(node->value);
 		node->value = var_value;
-		return (node);
+		return (free(var_name), node);
 	}
 	node = create_env_var(var_name, var_value, is_exp);
 	if (!node)

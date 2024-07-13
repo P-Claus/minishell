@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 17:38:48 by efret             #+#    #+#             */
-/*   Updated: 2024/07/05 20:02:26 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/11 15:41:08 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,13 @@ static void	envp_add_var(char **ret_var, t_var *list_var)
 		return ;
 	tmp = ft_strdup(list_var->name);
 	if (!tmp)
-		exit_handler(1); //Error handling
+		old_exit_handler(1); //Error handling
 	if (ft_strjoin_char(&tmp, '='))
-		exit_handler(1); //Error handling
+		old_exit_handler(1); //Error handling
 	value = ft_strjoin(tmp, list_var->value);
 	if (!value)
-		(free(tmp), exit_handler(1));
+		(free(tmp), old_exit_handler(1));
+	free(tmp);
 	*ret_var = value;
 }
 
@@ -76,7 +77,7 @@ char	**make_export_envp(t_var *env_list)
 	}
 	ret[count_vars] = NULL;
 	if (i != count_vars)
-		exit_handler(1); // Some oopsi happen
+		old_exit_handler(1); // Some oopsi happen
 	return (ret);
 }
 

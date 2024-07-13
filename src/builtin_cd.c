@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:21:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/11 19:33:20 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/13 11:51:03 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ static void	builtin_cd_no_arg(t_minishell *shell)
 	if (!home_node)
 	{
 		printf("cd: HOME not set\n");
-		exit_handler(1); //error handling
+		exit_handler(shell, 1); //error handling
 	}
 	if (chdir(home_node->value))
 	{
 		if (errno == 2)
 			printf("No such file or directory\n");
 		g_shell_stats.prev_exit = 1;
-		exit_handler(1); //malloc error
+		exit_handler(shell, 1); //malloc error
 	}
 	pwd_node = env_search_name(shell->env, "PWD");
 	if (pwd_node)
@@ -47,11 +47,11 @@ static void	builtin_cd_arg(t_cmd *cmd, t_minishell *shell)
 		if (errno == 2)
 			printf("No such file or directory\n");
 		g_shell_stats.prev_exit = 1;
-		exit_handler(1); //error handling
+		exit_handler(shell, 1); //error handling
 	}
 	pwd_value = getcwd(NULL, 0);
 	if (!pwd_value)
-		exit_handler(1);//malloc error
+		exit_handler(shell, 1);//malloc error
 	pwd_node = env_search_name(shell->env, "PWD");
 	if (pwd_node)
 		env_add_var2(&shell->env, "OLDPWD", pwd_node->value, true);
