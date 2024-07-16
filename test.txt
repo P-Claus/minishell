@@ -1,2 +1,0 @@
-Put this text inside the test.txt file with an append redir
-Put this text inside the test.txt file with an append redir
