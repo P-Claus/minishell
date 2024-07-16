@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 19:40:59 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/13 11:41:36 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/13 12:31:25 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	check_for_builtins(t_cmd *cmd, t_minishell *shell, int pipe_fd[2])
 	else if (exact_match(cmd->cmd_av[0], "env"))
 		builtin_wrapper(new_env, cmd, shell, pipe_fd);
 	else if (exact_match(cmd->cmd_av[0], "exit"))
-		printf("Exit Builtin\n");
+		;
 	else
 		return (0);
 	return (1);
