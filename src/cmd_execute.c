@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/13 12:48:48 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/16 18:41:15 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,11 +231,11 @@ int	ft_run_cmds(t_cmd *cmds, t_minishell *shell)
 
 	// copy to restore stdin for later. Maybe need to do this for the other std streams as well.
 	g_shell_stats.prev_exit = 0;
+	if (cmds && exact_match(cmds->cmd_av[0], "exit") && !cmds->next)
+		return (1);
 	parse_here_docs(shell, cmds, pipe_fd);
 	if (g_shell_stats.prev_exit)
 		return (0);
-	if (cmds && exact_match(cmds->cmd_av[0], "exit") && !cmds->next)
-		return (1);
 	stdin_copy = dup(STDIN_FILENO);
 	g_shell_stats.process_is_running = 1;
 	while (cmds && g_shell_stats.process_is_running)
