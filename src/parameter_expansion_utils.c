@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 08:14:42 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/17 08:55:21 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/17 18:36:24 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*get_expanded_string(int start, char **string, char *env_value,
 	string_to_expand = ft_strdup(env_value);
 	total_len = ft_strlen(string_to_expand) + ft_strlen(*string)
 		- ft_strlen(trimmed_parameter);
-	expanded_string = malloc((total_len + 1) * sizeof(char *));
+	expanded_string = malloc((total_len + 1) * sizeof(char));
 	if (!expanded_string)
 		return (NULL); //malloc failure
 	ft_strlcpy(expanded_string, *string, start + 1);
