@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 12:01:35 by efret             #+#    #+#             */
-/*   Updated: 2024/07/11 15:01:48 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/17 14:35:12 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,19 @@
 
 void	free_minishell(t_minishell *shell)
 {
+	if (shell->line)
+		free(shell->line);
+	close_redirs(shell->cmds);
+	free_cmds(&shell->cmds);
+	free_tokens(&shell->tokens);
 	free_env(&shell->env);
 	free_env_export(&shell->export_env);
 }
 
 void	exit_handler(t_minishell *shell, int status)
 {
+	(void)status;
 	rl_clear_history();
-	if (!status)
-		write(2, "exit\n", 5);
 	free_minishell(shell);
 	exit(g_shell_stats.prev_exit);
 }

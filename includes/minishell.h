@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/17 08:31:33 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/17 15:10:16 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,9 @@ typedef struct s_var
 
 typedef struct s_minishell
 {
+	char	*line;
+	t_cmd	*cmds;
+	t_token	*tokens;
 	t_var	*env;
 	char	**export_env;
 }	t_minishell;
@@ -142,7 +145,7 @@ int		new_echo(t_cmd *cmd, t_minishell *shell);
 int		new_env(t_cmd *cmd, t_minishell *shell);
 int		new_unset(t_cmd *cmd, t_minishell *shell);
 int		new_export(t_cmd *cmd, t_minishell *shell);
-
+void	check_for_exit(t_cmd *cmds, t_minishell *shell);
 void	builtin_exit(void);
 
 /*	UTILS	*/
@@ -174,7 +177,7 @@ size_t	count_cmd_av(t_token *tokens);
 void	make_cmd_list(t_cmd **cmds, t_token *tokens);
 void	do_redirs(t_cmd *cmd);
 void	close_redirs(t_cmd *cmd);
-int		ft_run_cmds(t_cmd *cmds, t_minishell *shell);
+void	ft_run_cmds(t_cmd *cmds, t_minishell *shell);
 char	*cmd_find_path(char *cmd_name, t_var *env_list);
 
 /* ENVIRONMENT VARIABLE */

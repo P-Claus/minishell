@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:45:03 by efret             #+#    #+#             */
-/*   Updated: 2024/07/13 12:52:33 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/17 14:49:50 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,43 +63,40 @@ static void	print_cmd_list(t_cmd *cmds)
 void	interactive(t_minishell *shell)
 {
 	char	*prompt;
-	char	*line;
-	t_token	*tokens;
-	t_cmd	*cmds;
-	bool	loop;
 
-	loop = true;
 	handle_sigint();
 	handle_sigquit();
-	while (loop)
+	while (1)
 	{
 		if (g_shell_stats.prev_exit)
 			prompt = "\001\033[31m\002->\001\033[0m\002 minishell> ";
 		else
 			prompt = "\001\033[32m\002->\001\033[0m\002 minishell> ";
-		cmds = NULL;
-		line = readline(prompt);
-		if (!line)
-			exit_handler(shell, errno);//to handle when control D is entered (= EOT)
-		if (line && *line)
+		shell->cmds = NULL;
+		shell->line = readline(prompt);
+		if (!shell->line)
 		{
-			add_history(line);
-
-			printf("You have entered: %s\n", line);
-			tokens = lexer(line, shell);
-			printf("\nIn Interactive\n");
-			disp_tokens(tokens);
-			make_cmd_list(&cmds, tokens);
-			printf("\nCommand list\n");
-			print_cmd_list(cmds);
-			printf("\nCommand output:\n");
-			if (ft_run_cmds(cmds, shell))
-				loop = false;
-			close_redirs(cmds);
-			free_cmds(&cmds);
-			free_tokens(&tokens);
+			write(STDERR_FILENO, "exit\n", 5);
+			exit_handler(shell, errno);//to handle when control D is entered (= EOT)
 		}
-		free(line);
+		if (shell->line && *shell->line)
+		{
+			add_history(shell->line);
+
+			printf("You have entered: %s\n", shell->line);
+			shell->tokens = lexer(shell->line, shell);
+			printf("\nIn Interactive\n");
+			disp_tokens(shell->tokens);
+			make_cmd_list(&shell->cmds, shell->tokens);
+			printf("\nCommand list\n");
+			print_cmd_list(shell->cmds);
+			printf("\nCommand output:\n");
+			ft_run_cmds(shell->cmds, shell);
+			close_redirs(shell->cmds);
+			free_cmds(&shell->cmds);
+			free_tokens(&shell->tokens);
+		}
+		free(shell->line);
 	}
 	exit_handler(shell, 0);
 }

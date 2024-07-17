@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:43 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/11 15:04:45 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/17 14:42:33 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,13 +131,13 @@ void	init_path(t_minishell *shell)
 
 void	shell_init(t_minishell *shell, char **envp)
 {
-	shell->env = NULL;
+	ft_memset(shell, 0, sizeof(t_minishell));
 	env_load(&shell->env, envp);
 	shell_lvl(shell);
 	init_pwd(shell);
 	old_pwd(shell);
 	init_path(shell);
-	memset(&g_shell_stats, 0, sizeof(t_shell_stats));
+	ft_memset(&g_shell_stats, 0, sizeof(t_shell_stats));
 	shell->export_env = make_export_envp(shell->env);
 }
 

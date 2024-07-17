@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/16 19:11:01 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/17 15:26:14 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,7 @@ static void	ft_execve(t_cmd *cmd, int pipe_fd[2], t_minishell *shell)
 	old_exit_handler(1); // reached if execve (execpv) had an error.
 }
 
-int	ft_run_cmds(t_cmd *cmds, t_minishell *shell)
+void	ft_run_cmds(t_cmd *cmds, t_minishell *shell)
 {
 	int	pipe_fd[2];
 	int	cpid;
@@ -231,13 +231,14 @@ int	ft_run_cmds(t_cmd *cmds, t_minishell *shell)
 
 	// copy to restore stdin for later. Maybe need to do this for the other std streams as well.
 	g_shell_stats.prev_exit = 0;
-	if (cmds && exact_match(cmds->cmd_av[0], "exit") && !cmds->next)
-		return (1);
+	check_for_exit(cmds, shell);
+	if (g_shell_stats.prev_exit)
+		return ;
 	if (cmds && ft_strchr(cmds->cmd_av[0], '=') && !cmds->next)
-		return (env_add_var(&shell->env, cmds->cmd_av[0], false), 0);
+		return (env_add_var(&shell->env, cmds->cmd_av[0], false), (void)0);
 	parse_here_docs(shell, cmds, pipe_fd);
 	if (g_shell_stats.prev_exit)
-		return (0);
+		return ;
 	stdin_copy = dup(STDIN_FILENO);
 	g_shell_stats.process_is_running = 1;
 	while (cmds && g_shell_stats.process_is_running)
@@ -267,5 +268,4 @@ int	ft_run_cmds(t_cmd *cmds, t_minishell *shell)
 	ft_wait(cpid);
 	if (dup2(stdin_copy, STDIN_FILENO) == -1 || close(stdin_copy))
 		old_exit_handler(1);
-	return (0);
 }
