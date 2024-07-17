@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/17 17:41:00 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/17 20:20:44 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,6 +207,34 @@ void	close_redirs(t_cmd *cmds)
 	}
 }
 
+void	update_cmd_av(t_cmd *cmd)
+{
+	size_t	i;
+	char	**old_cmd_av;
+
+	old_cmd_av = cmd->cmd_av;
+	i = 0;
+	while (old_cmd_av[i])
+		i++;
+	cmd->cmd_av = malloc(sizeof(char *) * i);
+	if (!cmd->cmd_av)
+		return ;
+	i = 0;
+	while (old_cmd_av[++i])
+		cmd->cmd_av[i - 1] = old_cmd_av[i];
+	free(old_cmd_av);
+}
+
+void	check_for_leading_vars(t_cmd *cmd, t_minishell *shell)
+{
+	while (ft_strchr(cmd->cmd_av[0], '='))
+	{
+		env_add_var(&shell->env, cmd->cmd_av[0], true);
+		update_cmd_av(cmd);
+		env_update_export(shell);
+	}
+}
+
 static void	ft_execve(t_cmd *cmd, int pipe_fd[2], t_minishell *shell)
 {
 	char	*cmd_path;
@@ -216,6 +244,9 @@ static void	ft_execve(t_cmd *cmd, int pipe_fd[2], t_minishell *shell)
 		old_exit_handler(1); // error
 	close(pipe_fd[PIPE_W]);
 	do_redirs(cmd);
+	check_for_leading_vars(cmd, shell);
+	if (!cmd->cmd_av[0] || !cmd->cmd_av[0][0])
+		exit_handler(shell, 0);
 	cmd_path = cmd_find_path(cmd->cmd_av[0], shell->env);
 	if (!cmd_path)
 		(printf("CMD NOT FOUND\n"), old_exit_handler(1));

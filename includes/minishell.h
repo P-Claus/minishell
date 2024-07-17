@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/17 15:10:16 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/17 20:02:44 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ char	*cmd_find_path(char *cmd_name, t_var *env_list);
 
 /* ENVIRONMENT VARIABLE */
 t_var	*create_env_var(char *name, char *val, bool is_exp);
-void	env_add_back(t_var **head, t_var *new_node);
+int		env_add_back(t_var **head, t_var *new_node);
 void	env_del_target(t_var **head, t_var *node);
 t_var	*env_search_name(t_var *head, char *name);
 void	env_load(t_var **head, char **envp);

@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 13:39:36 by efret             #+#    #+#             */
-/*   Updated: 2024/07/11 14:48:08 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/17 20:02:25 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,20 @@ t_var	*create_env_var(char *name, char *val, bool is_exp)
 	return (var);
 }
 
-void	env_add_back(t_var **head, t_var *new_node)
+int	env_add_back(t_var **head, t_var *new_node)
 {
 	t_var	*iter;
 
 	if (!head)
-		return (errno = EINVAL, (void)0);
+		return (errno = EINVAL, 1);
 	if (!(*head))
-		return (*head = new_node, (void)0);
+		return (*head = new_node, 0);
 	iter = *head;
 	while (iter->next)
 		iter = iter->next;
 	iter->next = new_node;
 	new_node->prev = iter;
+	return (0);
 }
 
 void	env_del_target(t_var **head, t_var *node)
