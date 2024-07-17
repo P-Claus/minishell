@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 08:39:33 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/17 08:55:03 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/17 09:02:14 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ static void	init_s_info(t_string_info *s_info)
 	s_info->start = 0;
 	s_info->end = 0;
 	s_info->free_env_value = false;
+	s_info->trimmed_parameter = NULL;
+	s_info->env_value = NULL;
+	s_info->expanded_string = NULL;
 }
 
 void	expand_string(char **string, t_minishell *shell)
