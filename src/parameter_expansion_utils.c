@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 08:14:42 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/16 08:48:06 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/17 08:55:21 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,34 +86,4 @@ char	*get_env_value(t_var *env, char *name)
 	if (node && node->value)
 		return (node->value);
 	return ("");
-}
-
-void	expand_string(char **string, t_minishell *shell)
-{
-	char	*trimmed_parameter;
-	char	*expanded_string;
-	int		start;
-	int		end;
-	char	*env_value;
-	bool	free_env_value;
-
-	while (ft_strchr(*string, '$'))
-	{
-		calculate_start_and_end(string, &start, &end);
-		trimmed_parameter = get_trimmed_parameter(start, end, string);
-		if (exact_match(trimmed_parameter, "$?"))
-		{
-			env_value = ft_itoa((int)g_shell_stats.prev_exit);
-			free_env_value = true;
-		}
-		else
-			env_value = get_env_value(shell->env, trimmed_parameter + 1);
-		expanded_string = get_expanded_string(start, string, env_value,
-				trimmed_parameter);
-		free(*string);
-		*string = expanded_string;
-		free(trimmed_parameter);
-		if (free_env_value == true)
-			free(env_value);
-	}
 }
