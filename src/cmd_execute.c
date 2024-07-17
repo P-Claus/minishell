@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/17 15:26:14 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/17 17:41:00 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,22 @@ static void	ft_execve(t_cmd *cmd, int pipe_fd[2], t_minishell *shell)
 	old_exit_handler(1); // reached if execve (execpv) had an error.
 }
 
+int	check_for_only_vars(t_cmd *cmds, t_minishell *shell)
+{
+	size_t	i;
+
+	i = 0;
+	if (!(cmds) || (cmds && cmds->next))
+		return (0);
+	while (cmds->cmd_av[i])
+		if (!ft_strchr(cmds->cmd_av[i++], '='))
+			return (0);
+	i = 0;
+	while (cmds->cmd_av[i])
+		env_add_var(&shell->env, cmds->cmd_av[i++], false);
+	return (1);
+}
+
 void	ft_run_cmds(t_cmd *cmds, t_minishell *shell)
 {
 	int	pipe_fd[2];
@@ -234,8 +250,8 @@ void	ft_run_cmds(t_cmd *cmds, t_minishell *shell)
 	check_for_exit(cmds, shell);
 	if (g_shell_stats.prev_exit)
 		return ;
-	if (cmds && ft_strchr(cmds->cmd_av[0], '=') && !cmds->next)
-		return (env_add_var(&shell->env, cmds->cmd_av[0], false), (void)0);
+	if (check_for_only_vars(cmds, shell))
+		return ;
 	parse_here_docs(shell, cmds, pipe_fd);
 	if (g_shell_stats.prev_exit)
 		return ;
