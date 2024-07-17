@@ -18,7 +18,8 @@ SOURCE_FILES	= main.c check_for_builtins.c exact_match.c exit_handler.c \
 				  env_list_utils.c env_make_utils.c env_export_utils.c \
 					remove_quotes.c parameter_expansion.c builtin_cd.c \
 					builtin_export.c builtin_functions.c lexer_handle_quotes.c \
-					parameter_expansion_utils.c lexer_handle_make_var.c	
+					parameter_expansion_utils.c lexer_handle_make_var.c	\
+					parameter_expansion_expand_string.c
 
 SOURCES_DIR		= src
 SOURCES			= $(addprefix $(SOURCES_DIR)/, $(SOURCE_FILES))

@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/13 12:48:38 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/17 08:31:33 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,16 @@ typedef struct s_shell_stats
 }	t_shell_stats;
 
 extern t_shell_stats	g_shell_stats;
+
+typedef	struct s_expand_string_info
+{
+	char	*trimmed_parameter;
+	char	*expanded_string;
+	int		start;
+	int		end;
+	char	*env_value;
+	bool	free_env_value;
+}	t_string_info;
 
 /* MAIN LOOP */
 void	interactive(t_minishell *shell);
