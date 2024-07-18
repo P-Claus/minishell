@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 08:14:42 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/17 18:36:24 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/18 14:08:18 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,23 @@ char	*get_env_value(t_var *env, char *name)
 {
 	t_var	*node;
 	char	*trimmed_name;
+	char	*double_trim;
+	bool	has_braces;
 
 	trimmed_name = name;
+	has_braces = false;
 	if (ft_strchr(name, '{') && ft_strchr(name, '}'))
 	{
 		trimmed_name = ft_strtrim(name, "{");
-		trimmed_name = ft_strtrim(trimmed_name, "}");
+		double_trim = ft_strtrim(trimmed_name, "}");
+		has_braces = true;
 	}
 	node = env_search_name(env, trimmed_name);
+	if (has_braces == true)
+	{
+		free(trimmed_name);
+		free(double_trim);
+	}
 	if (node && node->value)
 		return (node->value);
 	return ("");
