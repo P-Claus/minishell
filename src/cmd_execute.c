@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/17 20:20:44 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/18 16:40:50 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,6 +219,7 @@ void	update_cmd_av(t_cmd *cmd)
 	cmd->cmd_av = malloc(sizeof(char *) * i);
 	if (!cmd->cmd_av)
 		return ;
+	cmd->cmd_av[i - 1] = NULL;
 	i = 0;
 	while (old_cmd_av[++i])
 		cmd->cmd_av[i - 1] = old_cmd_av[i];
@@ -227,7 +228,7 @@ void	update_cmd_av(t_cmd *cmd)
 
 void	check_for_leading_vars(t_cmd *cmd, t_minishell *shell)
 {
-	while (ft_strchr(cmd->cmd_av[0], '='))
+	while (valid_var_token(cmd->cmd_av[0]))
 	{
 		env_add_var(&shell->env, cmd->cmd_av[0], true);
 		update_cmd_av(cmd);
@@ -262,7 +263,7 @@ int	check_for_only_vars(t_cmd *cmds, t_minishell *shell)
 	if (!(cmds) || (cmds && cmds->next))
 		return (0);
 	while (cmds->cmd_av[i])
-		if (!ft_strchr(cmds->cmd_av[i++], '='))
+		if (!valid_var_token(cmds->cmd_av[i++]))
 			return (0);
 	i = 0;
 	while (cmds->cmd_av[i])

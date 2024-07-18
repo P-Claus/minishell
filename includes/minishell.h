@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/17 20:02:44 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/18 16:39:56 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,4 +224,6 @@ void	handle_sigquit_child(void);
 void	handle_sigint_heredoc(void);
 void	handle_eof(char *line, int index);
 void	handle_sigchld(void);
+bool	valid_var_name(char *s);
+bool	valid_var_token(char *s);
 #endif
