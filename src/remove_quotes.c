@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 09:23:16 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/12 08:59:08 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/19 14:02:46 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,13 @@ static void	process_tokens_to_remove_quotes(char **string)
 				+ 1] == '"'))
 		{
 			len = ft_strlen(*string) - 2;
-			trimmed_string = malloc(len * sizeof(char));
+			trimmed_string = malloc((len + 1) * sizeof(char));
 			if (!trimmed_string)
 				return ;//malloc failure
+			ft_bzero(trimmed_string, len + 1);
 			ft_memcpy(trimmed_string, *string, i + 1);
-			ft_memcpy(trimmed_string + ft_strlen(trimmed_string), (*string) + i
-				+ 2, ft_strlen(*string) + i - 3);
+			ft_memcpy(trimmed_string + i + 1, (*string) + i
+				+ 2, ft_strlen(*string) - i - 3);
 			free(*string);
 			*string = trimmed_string;
 		}
