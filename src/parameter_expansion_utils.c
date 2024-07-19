@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 08:14:42 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/17 18:36:24 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/19 14:57:16 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,23 +66,34 @@ char	*get_expanded_string(int start, char **string, char *env_value,
 	ft_strlcpy(expanded_string, *string, start + 1);
 	ft_strlcat(expanded_string, string_to_expand, total_len + 1);
 	ft_strlcat(expanded_string, *string + start + ft_strlen(trimmed_parameter),
-		total_len + 1);
+			total_len + 1);
 	free(string_to_expand);
 	return (expanded_string);
 }
 
-char	*get_env_value(t_var *env, char *name)
+char	*get_env_value(t_var *env, char *name, bool has_braces)
 {
 	t_var	*node;
 	char	*trimmed_name;
+	char	*double_trim;
 
 	trimmed_name = name;
+	double_trim = NULL;
 	if (ft_strchr(name, '{') && ft_strchr(name, '}'))
 	{
 		trimmed_name = ft_strtrim(name, "{");
-		trimmed_name = ft_strtrim(trimmed_name, "}");
+		if (!trimmed_name)
+			return (""); //  malloc failure
+		double_trim = ft_strtrim(trimmed_name, "}");
+		free(trimmed_name);
+		if (!double_trim)
+			return (""); // malloc failure
+		trimmed_name = double_trim;
+		has_braces = true;
 	}
 	node = env_search_name(env, trimmed_name);
+	if (has_braces)
+		free(trimmed_name);
 	if (node && node->value)
 		return (node->value);
 	return ("");

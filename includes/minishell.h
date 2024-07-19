@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/17 15:10:16 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/19 14:57:22 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ void	calculate_start_and_end(char **string, int *start, int *end);
 char	*get_trimmed_parameter(int start, int end, char **string);
 char	*get_expanded_string(int start, char **string, char *env_value,
 		char *trimmed_parameter);
-char	*get_env_value(t_var *env, char *name);
+char	*get_env_value(t_var *env, char *name, bool has_braces);
 void	expand_string(char **string, t_minishell *shell);
 
 /*	LINKED LIST FUNCTIONS	*/
