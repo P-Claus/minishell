@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 08:39:33 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/17 09:02:14 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/19 14:56:34 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	expand_string(char **string, t_minishell *shell)
 		}
 		else
 			s_info.env_value = get_env_value(shell->env,
-					s_info.trimmed_parameter + 1);
+					s_info.trimmed_parameter + 1, false);
 		s_info.expanded_string = get_expanded_string(s_info.start, string,
 				s_info.env_value, s_info.trimmed_parameter);
 		free(*string);
