@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/17 15:26:14 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/18 16:40:50 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,6 +207,35 @@ void	close_redirs(t_cmd *cmds)
 	}
 }
 
+void	update_cmd_av(t_cmd *cmd)
+{
+	size_t	i;
+	char	**old_cmd_av;
+
+	old_cmd_av = cmd->cmd_av;
+	i = 0;
+	while (old_cmd_av[i])
+		i++;
+	cmd->cmd_av = malloc(sizeof(char *) * i);
+	if (!cmd->cmd_av)
+		return ;
+	cmd->cmd_av[i - 1] = NULL;
+	i = 0;
+	while (old_cmd_av[++i])
+		cmd->cmd_av[i - 1] = old_cmd_av[i];
+	free(old_cmd_av);
+}
+
+void	check_for_leading_vars(t_cmd *cmd, t_minishell *shell)
+{
+	while (valid_var_token(cmd->cmd_av[0]))
+	{
+		env_add_var(&shell->env, cmd->cmd_av[0], true);
+		update_cmd_av(cmd);
+		env_update_export(shell);
+	}
+}
+
 static void	ft_execve(t_cmd *cmd, int pipe_fd[2], t_minishell *shell)
 {
 	char	*cmd_path;
@@ -216,11 +245,30 @@ static void	ft_execve(t_cmd *cmd, int pipe_fd[2], t_minishell *shell)
 		old_exit_handler(1); // error
 	close(pipe_fd[PIPE_W]);
 	do_redirs(cmd);
+	check_for_leading_vars(cmd, shell);
+	if (!cmd->cmd_av[0] || !cmd->cmd_av[0][0])
+		exit_handler(shell, 0);
 	cmd_path = cmd_find_path(cmd->cmd_av[0], shell->env);
 	if (!cmd_path)
 		(printf("CMD NOT FOUND\n"), old_exit_handler(1));
 	execve(cmd_path, cmd->cmd_av, shell->export_env);
 	old_exit_handler(1); // reached if execve (execpv) had an error.
+}
+
+int	check_for_only_vars(t_cmd *cmds, t_minishell *shell)
+{
+	size_t	i;
+
+	i = 0;
+	if (!(cmds) || (cmds && cmds->next))
+		return (0);
+	while (cmds->cmd_av[i])
+		if (!valid_var_token(cmds->cmd_av[i++]))
+			return (0);
+	i = 0;
+	while (cmds->cmd_av[i])
+		env_add_var(&shell->env, cmds->cmd_av[i++], false);
+	return (1);
 }
 
 void	ft_run_cmds(t_cmd *cmds, t_minishell *shell)
@@ -234,8 +282,8 @@ void	ft_run_cmds(t_cmd *cmds, t_minishell *shell)
 	check_for_exit(cmds, shell);
 	if (g_shell_stats.prev_exit)
 		return ;
-	if (cmds && ft_strchr(cmds->cmd_av[0], '=') && !cmds->next)
-		return (env_add_var(&shell->env, cmds->cmd_av[0], false), (void)0);
+	if (check_for_only_vars(cmds, shell))
+		return ;
 	parse_here_docs(shell, cmds, pipe_fd);
 	if (g_shell_stats.prev_exit)
 		return ;

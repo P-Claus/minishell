@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 14:51:27 by efret             #+#    #+#             */
-/*   Updated: 2024/06/18 14:16:10 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/18 16:23:20 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ char	*ft_strchr(const char *s, int c)
 {
 	int	i;
 
+	if (!s)
+		return (NULL);
 	i = 0;
 	while (s[i])
 	{
