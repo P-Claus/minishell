@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/18 16:40:50 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/20 16:51:36 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ void	close_redirs(t_cmd *cmds)
 	}
 }
 
-void	update_cmd_av(t_cmd *cmd)
+void	update_cmd_av(t_cmd *cmd, t_minishell *shell)
 {
 	size_t	i;
 	char	**old_cmd_av;
@@ -218,7 +218,7 @@ void	update_cmd_av(t_cmd *cmd)
 		i++;
 	cmd->cmd_av = malloc(sizeof(char *) * i);
 	if (!cmd->cmd_av)
-		return ;
+		exit_handler(shell, 0);
 	cmd->cmd_av[i - 1] = NULL;
 	i = 0;
 	while (old_cmd_av[++i])
@@ -230,8 +230,9 @@ void	check_for_leading_vars(t_cmd *cmd, t_minishell *shell)
 {
 	while (valid_var_token(cmd->cmd_av[0]))
 	{
-		env_add_var(&shell->env, cmd->cmd_av[0], true);
-		update_cmd_av(cmd);
+		if (!env_add_var(&shell->env, cmd->cmd_av[0], true))
+			exit_handler(shell, 1);
+		update_cmd_av(cmd, shell);
 		env_update_export(shell);
 	}
 }
