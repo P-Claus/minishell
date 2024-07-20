@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 17:38:48 by efret             #+#    #+#             */
-/*   Updated: 2024/07/11 15:41:08 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/20 15:07:38 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,50 +39,56 @@ static size_t	count_export_vars(t_var *env_list)
 	return (ret);
 }
 
-static void	envp_add_var(char **ret_var, t_var *list_var)
+static int	envp_add_var(char **ret_var, t_var *list_var)
 {
 	char	*tmp;
 	char	*value;
 
-	if (!list_var->value)
-		return ;
+	if (!list_var || !list_var->value)
+		return (1);
 	tmp = ft_strdup(list_var->name);
 	if (!tmp)
-		old_exit_handler(1); //Error handling
+		return (1);
 	if (ft_strjoin_char(&tmp, '='))
-		old_exit_handler(1); //Error handling
+		return (free(tmp), 1);
 	value = ft_strjoin(tmp, list_var->value);
 	if (!value)
-		(free(tmp), old_exit_handler(1));
+		return (free(tmp), 1);
 	free(tmp);
 	*ret_var = value;
+	return (0);
 }
 
-char	**make_export_envp(t_var *env_list)
+char	**make_export_envp(t_minishell *shell)
 {
 	size_t	i;
 	size_t	count_vars;
+	t_var	*env_list;
 	char	**ret;
 
+	if (!shell)
+		return (NULL);
+	env_list = shell->env;
 	count_vars = count_export_vars(env_list);
 	ret = malloc(sizeof(char *) * (count_vars + 1));
 	if (!ret)
-		return (NULL);
+		exit_handler(shell, 0);
 	i = 0;
 	while (env_list && i < count_vars)
 	{
 		if (env_list->is_exp && env_list->value)
-			envp_add_var(&ret[i++], env_list);
+			if (envp_add_var(&ret[i++], env_list))
+				(free(ret), exit_handler(shell, 0));
 		env_list = env_list->next;
 	}
 	ret[count_vars] = NULL;
 	if (i != count_vars)
-		old_exit_handler(1); // Some oopsi happen
+		exit_handler(shell, 0);
 	return (ret);
 }
 
 void	env_update_export(t_minishell *shell)
 {
 	free_env_export(&shell->export_env);
-	shell->export_env = make_export_envp(shell->env);
+	shell->export_env = make_export_envp(shell);
 }

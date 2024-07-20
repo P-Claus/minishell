@@ -138,7 +138,7 @@ void	shell_init(t_minishell *shell, char **envp)
 	old_pwd(shell);
 	init_path(shell);
 	ft_memset(&g_shell_stats, 0, sizeof(t_shell_stats));
-	shell->export_env = make_export_envp(shell->env);
+	shell->export_env = make_export_envp(shell);
 }
 
 int	main(int ac, char **av, char **envp)
