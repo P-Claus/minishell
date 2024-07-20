@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:43 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/17 14:42:33 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/20 14:58:25 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,11 +145,11 @@ int	main(int ac, char **av, char **envp)
 {
 	t_minishell	shell;
 
+	if (ac > 2)
+		exit(0);
 	shell_init(&shell, envp);
 	if (ac == 2)
 		non_interactive(av[1], &shell);
-	if (ac > 2)
-		old_exit_handler(0);
 	load_rc(".minishellrc", &shell);
 	interactive(&shell);
 	return (0);
