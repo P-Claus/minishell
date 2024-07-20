@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:27:03 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/17 18:47:38 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/19 20:48:59 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ void	process_token(char **string, t_minishell *shell)
 	while (iter < (int)ft_strlen(*string) && (*string)[iter]
 		&& (*string)[iter] != '\0')
 	{
-		if ((*string)[iter] == '"' || (*string)[iter] == '$')
+		if (ft_strlen(*string) == 1 && (*string)[iter] == '$')
+			return ;
+		else if ((*string)[iter] == '"' || (*string)[iter] == '$')
 			expand_string(string, shell);
 		iter++;
 	}
