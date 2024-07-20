@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:36:12 by efret             #+#    #+#             */
-/*   Updated: 2024/07/17 20:08:09 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/20 15:34:55 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_var	*env_add_var2(t_var **head, char *name, char *value, bool is_exp)
 	}
 	node = create_env_var(var_name, var_value, is_exp);
 	if (!node || env_add_back(head, node))
-		return (free(var_name), free(var_value), NULL); // Error allocating
+		return (free(var_name), free(var_value), NULL);
 	return (node);
 }
 
@@ -75,21 +75,23 @@ t_var	*env_add_var(t_var **head, char *token, bool is_exp)
 		return (NULL);
 	name = ft_substr(token, 0, equal_sign - token);
 	if (!name)
-		return (errno = ENOMEM, NULL);
+		return (NULL);
 	value = ft_strdup(&equal_sign[1]);
 	if (!value)
-		return (free(name), errno = ENOMEM, NULL);
+		return (free(name), NULL);
 	node = env_add_var2(head, name, value, is_exp);
 	free(name);
 	free(value);
 	return (node);
 }
 
-void	env_load(t_var **head, char **envp)
+void	env_load(t_minishell *shell, char **envp)
 {
 	while (*envp)
 	{
-		env_add_var(head, *envp, true);
+		env_add_var(&shell->env, *envp, true);
+		if (errno)
+			exit_handler(shell, errno);
 		envp++;
 	}
 }

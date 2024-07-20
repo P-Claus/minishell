@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 13:39:36 by efret             #+#    #+#             */
-/*   Updated: 2024/07/17 20:02:25 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/20 16:23:57 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	env_del_target(t_var **head, t_var *node)
 	t_var	*next;
 	t_var	*prev;
 
-	if (!node)
+	if (!node || !head)
 		return ;
 	prev = node->prev;
 	next = node->next;
