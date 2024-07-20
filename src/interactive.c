@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:45:03 by efret             #+#    #+#             */
-/*   Updated: 2024/07/20 16:59:39 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/20 18:51:11 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,11 @@ void	interactive(t_minishell *shell)
 			shell->tokens = lexer(shell->line, shell);
 			printf("\nIn Interactive\n");
 			disp_tokens(shell->tokens);
-			make_cmd_list(&shell->cmds, shell->tokens);
+			if (make_cmd_list(shell, &shell->cmds, shell->tokens))
+			{
+				free(shell->line);
+				continue ;
+			}
 			printf("\nCommand list\n");
 			print_cmd_list(shell->cmds);
 			printf("\nCommand output:\n");

@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/20 15:51:07 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/20 18:18:55 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,8 +174,7 @@ t_redir	*create_redir(char *str, int flags);
 void	redir_add_back(t_redir **head, t_redir *new_node);
 
 /* COMMANDS */
-size_t	count_cmd_av(t_token *tokens);
-void	make_cmd_list(t_cmd **cmds, t_token *tokens);
+int		make_cmd_list(t_minishell *shell, t_cmd **cmds, t_token *tokens);
 void	do_redirs(t_cmd *cmd);
 void	close_redirs(t_cmd *cmd);
 void	ft_run_cmds(t_cmd *cmds, t_minishell *shell);
