@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 17:38:48 by efret             #+#    #+#             */
-/*   Updated: 2024/07/20 15:07:38 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/20 16:57:59 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,18 +72,18 @@ char	**make_export_envp(t_minishell *shell)
 	count_vars = count_export_vars(env_list);
 	ret = malloc(sizeof(char *) * (count_vars + 1));
 	if (!ret)
-		exit_handler(shell, 0);
+		exit_handler(shell, -1);
 	i = 0;
 	while (env_list && i < count_vars)
 	{
 		if (env_list->is_exp && env_list->value)
 			if (envp_add_var(&ret[i++], env_list))
-				(free(ret), exit_handler(shell, 0));
+				(free(ret), exit_handler(shell, -1));
 		env_list = env_list->next;
 	}
 	ret[count_vars] = NULL;
 	if (i != count_vars)
-		exit_handler(shell, 0);
+		exit_handler(shell, -1);
 	return (ret);
 }
 

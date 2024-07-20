@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/20 16:51:36 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/20 16:59:01 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,7 @@ void	update_cmd_av(t_cmd *cmd, t_minishell *shell)
 		i++;
 	cmd->cmd_av = malloc(sizeof(char *) * i);
 	if (!cmd->cmd_av)
-		exit_handler(shell, 0);
+		exit_handler(shell, -1);
 	cmd->cmd_av[i - 1] = NULL;
 	i = 0;
 	while (old_cmd_av[++i])
@@ -248,7 +248,7 @@ static void	ft_execve(t_cmd *cmd, int pipe_fd[2], t_minishell *shell)
 	do_redirs(cmd);
 	check_for_leading_vars(cmd, shell);
 	if (!cmd->cmd_av[0] || !cmd->cmd_av[0][0])
-		exit_handler(shell, 0);
+		exit_handler(shell, -1);
 	cmd_path = cmd_find_path(cmd->cmd_av[0], shell->env);
 	if (!cmd_path)
 		(printf("CMD NOT FOUND\n"), old_exit_handler(1));

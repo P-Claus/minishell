@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 12:01:35 by efret             #+#    #+#             */
-/*   Updated: 2024/07/17 14:35:12 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/20 16:50:39 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@ void	free_minishell(t_minishell *shell)
 
 void	exit_handler(t_minishell *shell, int status)
 {
-	(void)status;
 	rl_clear_history();
 	free_minishell(shell);
+	if (status != -1)
+		exit(status);
 	exit(g_shell_stats.prev_exit);
 }
 

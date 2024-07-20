@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:50:24 by efret             #+#    #+#             */
-/*   Updated: 2024/07/20 16:01:11 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/20 16:56:57 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	init_shell_lvl(t_minishell *shell)
 
 	var = env_search_name(shell->env, "SHLVL");
 	if (!var && !env_add_var2(&shell->env, "SHLVL", "1", true))
-		exit_handler(shell, 0);
+		exit_handler(shell, -1);
 	else if (!var)
 		return ;
 	lvl = ft_atoi(var->value) + 1;
@@ -37,7 +37,7 @@ static void	init_shell_lvl(t_minishell *shell)
 	if (!tmp)
 		return ;
 	if (!env_add_var2(&shell->env, "SHLVL", tmp, true))
-		(free(tmp), exit_handler(shell, 0));
+		(free(tmp), exit_handler(shell, -1));
 	return (free(tmp));
 }
 
@@ -45,7 +45,7 @@ static void	init_old_pwd(t_minishell *shell)
 {
 	if (!env_search_name(shell->env, "OLDPWD"))
 		if (!env_add_var2(&shell->env, "OLDPWD", NULL, true))
-			exit_handler(shell, 0);
+			exit_handler(shell, -1);
 }
 
 static void	init_pwd(t_minishell *shell)
@@ -55,11 +55,11 @@ static void	init_pwd(t_minishell *shell)
 
 	pwd_val = getcwd(NULL, 0);
 	if (!pwd_val)
-		exit_handler(shell, 0);
+		exit_handler(shell, -1);
 	var = env_add_var2(&shell->env, "PWD", pwd_val, true);
 	free(pwd_val);
 	if (!var)
-		exit_handler(shell, 0);
+		exit_handler(shell, -1);
 }
 
 static void	init_path(t_minishell *shell)
@@ -69,7 +69,7 @@ static void	init_path(t_minishell *shell)
 	dft_p = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin";
 	if (!env_search_name(shell->env, "PATH"))
 		if (!env_add_var2(&shell->env, "PATH", dft_p, false))
-			exit_handler(shell, 0);
+			exit_handler(shell, -1);
 }
 
 void	shell_init(t_minishell *shell, char **envp)

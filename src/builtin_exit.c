@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:08:58 by efret             #+#    #+#             */
-/*   Updated: 2024/07/17 15:46:50 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/20 17:00:28 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	check_for_exit(t_cmd *cmds, t_minishell *shell)
 	{
 		write(STDERR_FILENO, "exit\n", 5);
 		if (!cmds->cmd_av[1])
-			exit_handler(shell, 0);
+			exit_handler(shell, -1);
 		if (cmds->cmd_av[2])
 		{
 			g_shell_stats.prev_exit = 1;
@@ -63,8 +63,8 @@ void	check_for_exit(t_cmd *cmds, t_minishell *shell)
 			ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 			ft_putstr_fd(cmds->cmd_av[1], STDERR_FILENO);
 			ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-			exit_handler(shell, 0);
+			exit_handler(shell, -1);
 		}
-		exit_handler(shell, 0);
+		exit_handler(shell, -1);
 	}
 }

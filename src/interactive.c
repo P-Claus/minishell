@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:45:03 by efret             #+#    #+#             */
-/*   Updated: 2024/07/17 14:49:50 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/20 16:59:39 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,5 @@ void	interactive(t_minishell *shell)
 		}
 		free(shell->line);
 	}
-	exit_handler(shell, 0);
+	exit_handler(shell, -1);
 }
