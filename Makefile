@@ -20,7 +20,8 @@ SOURCE_FILES	= main.c check_for_builtins.c exact_match.c exit_handler.c \
 				  builtin_export.c builtin_functions.c builtin_exit.c \
 				  lexer_handle_quotes.c parameter_expansion_utils.c \
 				  lexer_handle_make_var.c parameter_expansion_expand_string.c \
-				  valid_var_checks.c shell_init.c here_doc.c
+				  valid_var_checks.c shell_init.c here_doc.c \
+				  cmd_special_checks.c
 
 SOURCES_DIR		= src
 SOURCES			= $(addprefix $(SOURCES_DIR)/, $(SOURCE_FILES))
