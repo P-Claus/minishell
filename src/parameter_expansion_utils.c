@@ -6,31 +6,31 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 08:14:42 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/19 14:57:16 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/22 11:10:40 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	calculate_start_and_end(char **string, int *start, int *end)
+void	calculate_start_and_end(char **string, int *start, int *end, int iter)
 {
 	int	i;
 
 	i = 0;
-	while ((*string)[i] != '\0')
+	while (((*string) + iter)[i] != '\0')
 	{
-		if ((*string)[i] == '$' && (*string)[i + 1] == '?')
+		if (((*string) + iter)[i] == '$' && ((*string) + iter)[i + 1] == '?')
 		{
 			*start = i;
 			*end = i + 2;
 			return ;
 		}
-		else if ((*string)[i] == '$')
+		if (((*string) + iter)[i] == '$')
 		{
 			*start = i;
-			while (ft_isalnum((*string)[i]) || (*string)[i] == '_'
-				|| (*string)[i] == '$' || (*string)[i] == '{'
-				|| (*string)[i] == '}')
+			while (ft_isalnum(((*string) + iter)[i]) || ((*string)
+					+ iter)[i] == '_' || ((*string) + iter)[i] == '$'
+				|| ((*string) + iter)[i] == '{' || ((*string) + iter)[i] == '}')
 				i++;
 			*end = i;
 			return ;
@@ -66,7 +66,7 @@ char	*get_expanded_string(int start, char **string, char *env_value,
 	ft_strlcpy(expanded_string, *string, start + 1);
 	ft_strlcat(expanded_string, string_to_expand, total_len + 1);
 	ft_strlcat(expanded_string, *string + start + ft_strlen(trimmed_parameter),
-			total_len + 1);
+		total_len + 1);
 	free(string_to_expand);
 	return (expanded_string);
 }
