@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:45:03 by efret             #+#    #+#             */
-/*   Updated: 2024/07/20 18:51:11 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/22 17:04:58 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	interactive(t_minishell *shell)
 			if (make_cmd_list(shell, &shell->cmds, shell->tokens))
 			{
 				free(shell->line);
+				free_tokens(&shell->tokens);
 				continue ;
 			}
 			printf("\nCommand list\n");
