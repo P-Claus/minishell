@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/20 15:51:07 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/22 11:11:12 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,12 +157,12 @@ int		is_regular_character(char c);
 int		is_meta_character(char c);
 void	reset_lexer_state(t_lexeme *lexeme, t_lexing_state lexing_state);
 int		ft_strjoin_char(char **str, char c);
-void	calculate_start_and_end(char **string, int *start, int *end);
+void	calculate_start_and_end(char **string, int *start, int *end, int iter);
 char	*get_trimmed_parameter(int start, int end, char **string);
 char	*get_expanded_string(int start, char **string, char *env_value,
 		char *trimmed_parameter);
 char	*get_env_value(t_var *env, char *name, bool has_braces);
-void	expand_string(char **string, t_minishell *shell);
+void	expand_string(char **string, t_minishell *shell, t_string_info *s_info, int iter);
 
 /*	LINKED LIST FUNCTIONS	*/
 t_token	*create_token(char *string);
