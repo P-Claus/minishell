@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 19:40:59 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/13 12:31:25 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/23 14:51:17 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	builtin_wrapper(int (*func)(t_cmd *, t_minishell *), t_cmd *cmd,
 	stdout_copy = dup(STDOUT_FILENO);
 	if (cmd->next && dup2(pipe_fd[PIPE_W], STDOUT_FILENO) == -1)
 		old_exit_handler(1); //error
-	do_redirs(cmd);
+	do_redirs(cmd, shell);
 	g_shell_stats.prev_exit = func(cmd, shell);
 	close(pipe_fd[PIPE_W]);
 	if (dup2(pipe_fd[PIPE_R], STDIN_FILENO) == -1 || close(pipe_fd[PIPE_R]))
