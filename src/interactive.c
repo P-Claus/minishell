@@ -6,12 +6,58 @@
 /*   By: efret <efret@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:45:03 by efret             #+#    #+#             */
-/*   Updated: 2024/07/23 14:39:29 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/23 23:11:42 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+static inline void	set_prompt(char **prompt)
+{
+	if (g_shell_stats.prev_exit)
+		*prompt = "\001\033[31m\002->\001\033[0m\002 minishell> ";
+	else
+		*prompt = "\001\033[32m\002->\001\033[0m\002 minishell> ";
+}
+
+static inline void	process_line(t_minishell *shell)
+{
+	if (!shell->line)
+	{
+		write(STDERR_FILENO, "exit\n", 5);
+		exit_handler(shell, -1);
+	}
+	if (shell->line && *shell->line)
+	{
+		add_history(shell->line);
+		shell->tokens = lexer(shell->line, shell);
+		if (make_cmd_list(shell, &shell->cmds, shell->tokens))
+			return (free_tokens(&shell->tokens));
+		ft_run_cmds(shell->cmds, shell);
+		close_redirs(shell->cmds);
+		free_cmds(&shell->cmds);
+		free_tokens(&shell->tokens);
+	}
+}
+
+void	interactive(t_minishell *shell)
+{
+	char	*prompt;
+
+	handle_sigint();
+	handle_sigquit();
+	while (1)
+	{
+		set_prompt(&prompt);
+		shell->cmds = NULL;
+		shell->line = readline(prompt);
+		process_line(shell);
+		free(shell->line);
+	}
+	exit_handler(shell, -1);
+}
+
+/*
 static void	disp_tokens(t_token *tokens)
 {
 	while (tokens)
@@ -59,7 +105,9 @@ static void	print_cmd_list(t_cmd *cmds)
 		cmds = cmds->next;
 	}
 }
+*/
 
+/*
 void	interactive(t_minishell *shell)
 {
 	char	*prompt;
@@ -105,3 +153,4 @@ void	interactive(t_minishell *shell)
 	}
 	exit_handler(shell, -1);
 }
+*/

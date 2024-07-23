@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/23 21:09:24 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/23 22:36:02 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,15 +117,15 @@ typedef struct s_minishell
 
 typedef struct s_shell_stats
 {
-	pid_t	cmd_pid;
+	pid_t					cmd_pid;
 	volatile sig_atomic_t	prev_exit;
-	int	stat_flags;
+	int						stat_flags;
 	volatile sig_atomic_t	process_is_running;
 }	t_shell_stats;
 
 extern t_shell_stats	g_shell_stats;
 
-typedef	struct s_expand_string_info
+typedef struct s_expand_string_info
 {
 	char	*trimmed_parameter;
 	char	*expanded_string;
@@ -158,10 +158,14 @@ int		is_meta_character(char c);
 void	reset_lexer_state(t_lexeme *lexeme, t_lexing_state lexing_state);
 int		ft_strjoin_char(char **str, char c);
 void	calculate_start_and_end(char **string, int *start, int *end, int iter);
-char	*get_trimmed_parameter(int start, int end, char **string, t_minishell *shell);
-char	*get_expanded_string(t_string_info *s_info, char **string, t_minishell *shell);
-char	*get_env_value(t_var *env, char *name, bool has_braces, t_minishell *shell);
-void	expand_string(char **string, t_minishell *shell, t_string_info *s_info, int iter);
+char	*get_trimmed_parameter(
+			int start, int end, char **string, t_minishell *shell);
+char	*get_expanded_string(
+			t_string_info *s_info, char **string, t_minishell *shell);
+char	*get_env_value(
+			t_var *env, char *name, bool has_braces, t_minishell *shell);
+void	expand_string(
+			char **string, t_minishell *shell, t_string_info *s_info, int iter);
 
 /*	LINKED LIST FUNCTIONS	*/
 t_token	*create_token(char *string);
