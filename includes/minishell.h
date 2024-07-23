@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/23 17:05:12 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/23 21:09:24 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,10 +158,9 @@ int		is_meta_character(char c);
 void	reset_lexer_state(t_lexeme *lexeme, t_lexing_state lexing_state);
 int		ft_strjoin_char(char **str, char c);
 void	calculate_start_and_end(char **string, int *start, int *end, int iter);
-char	*get_trimmed_parameter(int start, int end, char **string);
-char	*get_expanded_string(int start, char **string, char *env_value,
-		char *trimmed_parameter);
-char	*get_env_value(t_var *env, char *name, bool has_braces);
+char	*get_trimmed_parameter(int start, int end, char **string, t_minishell *shell);
+char	*get_expanded_string(t_string_info *s_info, char **string, t_minishell *shell);
+char	*get_env_value(t_var *env, char *name, bool has_braces, t_minishell *shell);
 void	expand_string(char **string, t_minishell *shell, t_string_info *s_info, int iter);
 
 /*	LINKED LIST FUNCTIONS	*/
@@ -222,7 +221,7 @@ void	handle_var_double(t_lexeme *lexeme, char *line, int **index);
 void	handle_var_make(t_lexeme *lexeme, char *line, int **index);
 void	parser(t_token **token);
 void	remove_quotes_from_quoted_string(t_token **token);
-void	remove_quotes_from_variables(t_token **token);
+void	remove_quotes_from_variables(t_token **token, t_minishell *shell);
 void	expand_parameters(t_token **token, t_minishell *shell);
 void	handle_sigint(void);
 void	handle_sigquit(void);

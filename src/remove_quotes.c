@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 09:23:16 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/19 14:02:46 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/23 14:56:43 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	remove_quotes_from_quoted_string(t_token **token)
 	}
 }
 
-static void	process_tokens_to_remove_quotes(char **string)
+static void	process_tokens_to_remove_quotes(char **string, t_minishell *shell)
 {
 	int		i;
 	int		len;
@@ -54,7 +54,7 @@ static void	process_tokens_to_remove_quotes(char **string)
 			len = ft_strlen(*string) - 2;
 			trimmed_string = malloc((len + 1) * sizeof(char));
 			if (!trimmed_string)
-				return ;//malloc failure
+				exit_handler(shell, errno);
 			ft_bzero(trimmed_string, len + 1);
 			ft_memcpy(trimmed_string, *string, i + 1);
 			ft_memcpy(trimmed_string + i + 1, (*string) + i
@@ -66,7 +66,7 @@ static void	process_tokens_to_remove_quotes(char **string)
 	}
 }
 
-void	remove_quotes_from_variables(t_token **token)
+void	remove_quotes_from_variables(t_token **token, t_minishell *shell)
 {
 	t_token	*iter;
 
@@ -74,7 +74,7 @@ void	remove_quotes_from_variables(t_token **token)
 	while (iter)
 	{
 		if (ft_strchr(iter->str, '\'') || ft_strchr(iter->str, '"'))
-			process_tokens_to_remove_quotes(&iter->str);
+			process_tokens_to_remove_quotes(&iter->str, shell);
 		if (iter->next)
 			iter = iter->next;
 		else

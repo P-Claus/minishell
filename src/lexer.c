@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 13:56:40 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/13 11:46:52 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/23 14:54:47 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_token	*lexer(char *line, t_minishell *shell)
 	update_and_process_lexer(&lexeme, line, &index);
 	parser(&lexeme.head);
 	expand_parameters(&lexeme.head, shell);
-	remove_quotes_from_variables(&lexeme.head);
+	remove_quotes_from_variables(&lexeme.head, shell);
 	remove_quotes_from_quoted_string(&lexeme.head);
 	return (lexeme.head);
 }

@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 08:14:42 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/22 11:10:40 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/23 15:03:02 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,39 +39,41 @@ void	calculate_start_and_end(char **string, int *start, int *end, int iter)
 	}
 }
 
-char	*get_trimmed_parameter(int start, int end, char **string)
+char	*get_trimmed_parameter(int start, int end, char **string,
+		t_minishell *shell)
 {
 	char	*trimmed_parameter;
 
 	trimmed_parameter = malloc((end - start + 1) * sizeof(char));
 	if (!trimmed_parameter)
-		return (NULL); //malloc failure
+		exit_handler(shell, errno);
 	ft_strlcpy(trimmed_parameter, *string + start, end - start + 1);
 	return (trimmed_parameter);
 }
 
-char	*get_expanded_string(int start, char **string, char *env_value,
-		char *trimmed_parameter)
+char	*get_expanded_string(t_string_info *s_info, char **string,
+		t_minishell *shell)
 {
 	char	*string_to_expand;
 	char	*expanded_string;
 	int		total_len;
 
-	string_to_expand = ft_strdup(env_value);
+	string_to_expand = ft_strdup(s_info->env_value);
 	total_len = ft_strlen(string_to_expand) + ft_strlen(*string)
-		- ft_strlen(trimmed_parameter);
+		- ft_strlen(s_info->trimmed_parameter);
 	expanded_string = malloc((total_len + 1) * sizeof(char));
 	if (!expanded_string)
-		return (NULL); //malloc failure
-	ft_strlcpy(expanded_string, *string, start + 1);
+		exit_handler(shell, errno);
+	ft_strlcpy(expanded_string, *string, s_info->start + 1);
 	ft_strlcat(expanded_string, string_to_expand, total_len + 1);
-	ft_strlcat(expanded_string, *string + start + ft_strlen(trimmed_parameter),
-		total_len + 1);
+	ft_strlcat(expanded_string, *string + s_info->start
+		+ ft_strlen(s_info->trimmed_parameter), total_len + 1);
 	free(string_to_expand);
 	return (expanded_string);
 }
 
-char	*get_env_value(t_var *env, char *name, bool has_braces)
+char	*get_env_value(t_var *env, char *name, bool has_braces,
+		t_minishell *shell)
 {
 	t_var	*node;
 	char	*trimmed_name;
@@ -83,11 +85,11 @@ char	*get_env_value(t_var *env, char *name, bool has_braces)
 	{
 		trimmed_name = ft_strtrim(name, "{");
 		if (!trimmed_name)
-			return (""); //  malloc failure
+			exit_handler(shell, errno);
 		double_trim = ft_strtrim(trimmed_name, "}");
 		free(trimmed_name);
 		if (!double_trim)
-			return (""); // malloc failure
+			exit_handler(shell, errno);
 		trimmed_name = double_trim;
 		has_braces = true;
 	}
