@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:43 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/20 18:55:49 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/23 23:19:02 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	non_interactive(char *filename, t_minishell *shell)
 		free(line);
 		line = get_next_line(file);
 	}
-	exit(0);
+	exit_handler(shell, -1);
 }
 
 void	load_rc(char *filename, t_minishell *shell)
