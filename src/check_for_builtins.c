@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 19:40:59 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/23 15:15:24 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/23 15:45:53 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ static void	builtin_wrapper(int (*func)(t_cmd *, t_minishell *), t_cmd *cmd,
 		exit_handler(shell, errno);
 	do_redirs(cmd, shell);
 	g_shell_stats.prev_exit = func(cmd, shell);
+	if (g_shell_stats.prev_exit)
+		g_shell_stats.process_is_running = 0;
 	close(pipe_fd[PIPE_W]);
 	if (dup2(pipe_fd[PIPE_R], STDIN_FILENO) == -1 || close(pipe_fd[PIPE_R]))
 		exit_handler(shell, errno);
