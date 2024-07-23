@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 19:31:29 by pclaus            #+#    #+#             */
-/*   Updated: 2024/05/10 19:32:13 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/23 21:04:49 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 bool	exact_match(char *s, char *to_match)
 {
-	size_t s_len;
-	size_t to_match_len;
-	size_t i;
+	size_t	s_len;
+	size_t	to_match_len;
+	size_t	i;
 
 	s_len = ft_strlen(s);
 	to_match_len = ft_strlen(to_match);

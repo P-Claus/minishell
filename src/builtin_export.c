@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:28:14 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/18 15:20:02 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/23 21:13:23 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,14 @@ static int	export_print(t_minishell *shell)
 	return (0);
 }
 
+static void	handle_invalid_var_name(char *string)
+{
+	g_shell_stats.prev_exit = 1;
+	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+	ft_putstr_fd(string, STDERR_FILENO);
+	ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
+}
+
 int	new_export(t_cmd *cmd, t_minishell *shell)
 {
 	size_t	iter;
@@ -44,10 +52,7 @@ int	new_export(t_cmd *cmd, t_minishell *shell)
 	{
 		if (!valid_var_name(cmd->cmd_av[iter]))
 		{
-			g_shell_stats.prev_exit = 1;
-			ft_putstr_fd("minishell: export: `", STDERR_FILENO);
-			ft_putstr_fd(cmd->cmd_av[iter++], STDERR_FILENO);
-			ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
+			handle_invalid_var_name(cmd->cmd_av[iter++]);
 			continue ;
 		}
 		if (ft_strchr(cmd->cmd_av[iter], '='))
