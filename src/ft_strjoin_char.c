@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:15:29 by pclaus            #+#    #+#             */
-/*   Updated: 2024/05/28 14:12:14 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/23 21:40:27 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	ft_strjoin_char(char **str, char c)
 	char	*tmp;
 	char	*new_str;
 	size_t	i;
+
 	if (*str == NULL)
 	{
 		*str = malloc(1);
@@ -27,12 +28,9 @@ int	ft_strjoin_char(char **str, char c)
 	new_str = malloc((ft_strlen(*str) + 2));
 	if (!new_str)
 		return (1);
-	i = 0;
-	while ((*str)[i])
-	{
+	i = -1;
+	while ((*str)[++i])
 		new_str[i] = (*str)[i];
-		i++;
-	}
 	new_str[i] = c;
 	new_str[i + 1] = '\0';
 	tmp = *str;

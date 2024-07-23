@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:09:16 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/13 11:58:22 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/23 21:26:51 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	custom_sigint_handler_function(int signal)
 {
-
 	(void)signal;
 	if (!g_shell_stats.process_is_running)
 	{
