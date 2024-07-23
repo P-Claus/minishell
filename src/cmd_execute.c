@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/23 18:36:03 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/24 00:01:49 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ static inline void	ft_execve(t_cmd *cmd, int pipe_fd[2], t_minishell *shell)
 		exit_handler(shell, -1);
 	cmd_path = cmd_find_path(cmd->cmd_av[0], shell->env);
 	if (!cmd_path)
-		(ft_putstr_fd(cmd->cmd_av[0], STDERR_FILENO),
-			ft_putendl_fd(": command not found", STDERR_FILENO),
-			exit_handler(shell, 127));
+		exit_handler(shell, -1);
 	execve(cmd_path, cmd->cmd_av, shell->export_env);
 	exit_handler(shell, errno);
 }
