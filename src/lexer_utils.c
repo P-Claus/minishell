@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 10:18:56 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/20 09:08:28 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/23 14:31:40 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	is_regular_character(char c)
 {
 	if ((c == '!') || (c == '#') || (c == '%') || (c >= '*' && c <= ':')
 		|| (c == '=') || (c == '?') || (c >= 'A' && c <= 'Z') || (c == '^')
-		|| (c == '_') || (c >= 'a' && c <= 'z') || (c == '~') || (c == '{') 
+		|| (c == '_') || (c >= 'a' && c <= 'z') || (c == '~') || (c == '{')
 		|| (c == '}'))
 		return (1);
 	else
@@ -53,7 +53,7 @@ void	reset_lexer_state(t_lexeme *lexeme, t_lexing_state lexing_state)
 	lexeme->string = NULL;
 	lexeme->lexing_state = lexing_state;
 }
-
+/*
 int	handle_unexpected_token(char *line, int index, char ascii_code)
 {
 	if ((line[index] == ascii_code) && (line[index - 1] == ascii_code)
@@ -64,4 +64,4 @@ int	handle_unexpected_token(char *line, int index, char ascii_code)
 	}
 	else
 		return (0);
-}
+}*/

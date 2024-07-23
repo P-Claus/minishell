@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:27:03 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/22 11:11:14 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/23 14:16:02 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	init_s_info(t_string_info *s_info)
 
 void	process_token(char **string, t_minishell *shell)
 {
-	int	iter;
+	int				iter;
 	t_string_info	s_info;
 
 	init_s_info(&s_info);

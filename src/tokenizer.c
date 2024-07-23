@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:37:56 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/12 08:55:09 by pclaus           ###   ########.fr       */
+/*   Updated: 2024/07/23 14:16:55 by pclaus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,7 @@ void	add_token_to_end(t_token **head, t_token *new_token)
 		iter = iter->next;
 	iter->next = new_token;
 }
-/*
-void	print_list(t_token **token)
-{
-	int	iter;
 
-	iter = 0;
-	while (token != NULL && (*token)->str != NULL)
-	{
-		printf("#%d: The value in the node from the tokenizer is:\
-				%s ~~ The tag is: %d\n", iter, (*token)->str, (*token)->tag);
-		iter++;
-		if ((*token)->next != NULL)
-			*token = (*token)->next;
-		else
-			break ;
-	}
-}
-
-*/
 void	free_tokens(t_token **tokens)
 {
 	t_token	*free_me;
@@ -74,4 +56,3 @@ void	free_tokens(t_token **tokens)
 	}
 	*tokens = NULL;
 }
-
