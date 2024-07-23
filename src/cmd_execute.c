@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/23 16:18:29 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/23 18:36:03 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static inline void	ft_run_cmds_fork(t_cmd *cmds, t_minishell *shell,
 {
 	*cpid = fork();
 	if (*cpid == -1)
-		old_exit_handler(1);
+		exit_handler(shell, errno);
 	if (!(*cpid))
 		ft_execve(cmds, pipe_fd, shell);
 	g_shell_stats.cmd_pid = *cpid;
