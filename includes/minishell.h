@@ -173,12 +173,17 @@ t_redir	*create_redir(char *str, int flags);
 void	redir_add_back(t_redir **head, t_redir *new_node);
 
 /* COMMANDS */
-size_t	count_cmd_av(t_token *tokens);
-void	make_cmd_list(t_cmd **cmds, t_token *tokens);
-void	do_redirs(t_cmd *cmd);
-void	close_redirs(t_cmd *cmd);
-void	ft_run_cmds(t_cmd *cmds, t_minishell *shell);
+int		make_cmd_list(t_minishell *shell, t_cmd **cmds, t_token *tokens);
 char	*cmd_find_path(char *cmd_name, t_var *env_list);
+void	do_redirs(t_cmd *cmd, t_minishell *shell);
+void	close_redirs(t_cmd *cmd);
+void	check_for_leading_vars(t_cmd *cmd, t_minishell *shell);
+int		check_for_only_vars(t_cmd *cmds, t_minishell *shell);
+void	ft_run_cmds(t_cmd *cmds, t_minishell *shell);
+void	ft_wait(pid_t cpid);
+
+/* HERE_DOC */
+void	parse_here_docs(t_minishell *shell, t_cmd *cmds, int pipe_fd[2]);
 
 /* ENVIRONMENT VARIABLE */
 t_var	*create_env_var(char *name, char *val, bool is_exp);

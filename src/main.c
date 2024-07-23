@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:43 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/20 17:02:58 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/20 18:55:49 by efret            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	non_interactive(char *filename, t_minishell *shell)
 	{
 		cmds = NULL;
 		tokens = lexer(line, shell);
-		make_cmd_list(&cmds, tokens);
+		if (make_cmd_list(shell, &cmds, tokens))
+			exit_handler(shell, -1);
 		ft_run_cmds(cmds, shell);
 		free_cmds(&cmds);
 		free_tokens(&tokens);
@@ -54,7 +55,8 @@ void	load_rc(char *filename, t_minishell *shell)
 	{
 		cmds = NULL;
 		tokens = lexer(line, shell);
-		make_cmd_list(&cmds, tokens);
+		if (make_cmd_list(shell, &cmds, tokens))
+			return (close(file), free(line));
 		ft_run_cmds(cmds, shell);
 		free_cmds(&cmds);
 		free_tokens(&tokens);
