@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:36:12 by efret             #+#    #+#             */
-/*   Updated: 2024/07/20 15:34:55 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/24 15:12:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_var	*env_add_var_only(t_var **head, char *name, bool is_exp)
 	return (node);
 }
 
-t_var	*env_add_var2(t_var **head, char *name, char *value, bool is_exp)
+t_var	*env_add_var2(t_var **head, char *name, char *value, bool exp)
 {
 	char	*var_name;
 	char	*var_value;
@@ -54,10 +54,10 @@ t_var	*env_add_var2(t_var **head, char *name, char *value, bool is_exp)
 		if (node->value)
 			free(node->value);
 		node->value = var_value;
-		node->is_exp = is_exp;
+		node->is_exp = (node->is_exp == true) + (node->is_exp == false) * exp;
 		return (free(var_name), node);
 	}
-	node = create_env_var(var_name, var_value, is_exp);
+	node = create_env_var(var_name, var_value, exp);
 	if (!node || env_add_back(head, node))
 		return (free(var_name), free(var_value), NULL);
 	return (node);

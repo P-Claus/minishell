@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/24 14:54:08 by marvin           ###   ########.fr       */
+/*   Updated: 2024/07/24 15:12:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ int		env_add_back(t_var **head, t_var *new_node);
 void	env_del_target(t_var **head, t_var *node);
 t_var	*env_search_name(t_var *head, char *name);
 void	env_load(t_minishell *shell, char **envp);
-t_var	*env_add_var2(t_var **head, char *name, char *value, bool is_exp);
+t_var	*env_add_var2(t_var **head, char *name, char *value, bool exp);
 t_var	*env_add_var(t_var **head, char *token, bool is_exp);
 t_var	*env_add_var_only(t_var **env, char *name, bool is_exp);
 char	**make_export_envp(t_minishell *shell);

@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 19:15:17 by efret             #+#    #+#             */
-/*   Updated: 2024/07/22 19:23:22 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/24 15:15:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	check_for_leading_vars(t_cmd *cmd, t_minishell *shell)
 int	check_for_only_vars(t_cmd *cmds, t_minishell *shell)
 {
 	size_t	i;
+	t_var	*node;
 
 	i = 0;
 	if (!(cmds) || (cmds && cmds->next))
@@ -54,6 +55,11 @@ int	check_for_only_vars(t_cmd *cmds, t_minishell *shell)
 			return (0);
 	i = 0;
 	while (cmds->cmd_av[i])
-		env_add_var(&shell->env, cmds->cmd_av[i++], false);
+	{
+		node = env_add_var(&shell->env, cmds->cmd_av[i], false);
+		if (node && node->is_exp)
+			env_update_export(shell);
+		i++;
+	}
 	return (1);
 }
