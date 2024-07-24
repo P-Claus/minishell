@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 18:32:55 by pclaus            #+#    #+#             */
-/*   Updated: 2024/07/23 22:36:02 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/24 14:54:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,9 +117,7 @@ typedef struct s_minishell
 
 typedef struct s_shell_stats
 {
-	pid_t					cmd_pid;
 	volatile sig_atomic_t	prev_exit;
-	int						stat_flags;
 	volatile sig_atomic_t	process_is_running;
 }	t_shell_stats;
 

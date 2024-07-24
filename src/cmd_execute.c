@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/24 00:01:49 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/24 14:54:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static inline void	ft_run_cmds_fork(t_cmd *cmds, t_minishell *shell,
 		exit_handler(shell, errno);
 	if (!(*cpid))
 		ft_execve(cmds, pipe_fd, shell);
-	g_shell_stats.cmd_pid = *cpid;
 	close(pipe_fd[PIPE_W]);
 	if (dup2(pipe_fd[PIPE_R], STDIN_FILENO) == -1)
 		exit_handler(shell, errno);

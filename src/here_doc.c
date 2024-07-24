@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 17:51:54 by efret             #+#    #+#             */
-/*   Updated: 2024/07/22 19:06:23 by efret            ###   ########.fr       */
+/*   Updated: 2024/07/24 14:54:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ static void	here_doc_fork(
 		exit_handler(shell, errno);
 	if (!cpid)
 		read_here_doc(shell, pipe_fd, redir, expand);
-	g_shell_stats.cmd_pid = cpid;
 	close(pipe_fd[PIPE_W]);
 	ft_wait(cpid);
 }
