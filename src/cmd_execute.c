@@ -6,7 +6,7 @@
 /*   By: pclaus <pclaus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 22:08:47 by efret             #+#    #+#             */
-/*   Updated: 2024/07/24 14:54:44 by marvin           ###   ########.fr       */
+/*   Updated: 2024/07/24 16:25:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static inline void	ft_execve(t_cmd *cmd, int pipe_fd[2], t_minishell *shell)
 	check_for_leading_vars(cmd, shell);
 	if (!cmd->cmd_av[0] || !cmd->cmd_av[0][0])
 		exit_handler(shell, -1);
-	cmd_path = cmd_find_path(cmd->cmd_av[0], shell->env);
+	cmd_path = cmd_find_path(cmd->cmd_av[0], shell->env, shell);
 	if (!cmd_path)
 		exit_handler(shell, -1);
 	execve(cmd_path, cmd->cmd_av, shell->export_env);
