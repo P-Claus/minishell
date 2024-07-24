@@ -6,11 +6,23 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 16:02:06 by efret             #+#    #+#             */
-/*   Updated: 2024/07/24 15:46:30 by marvin           ###   ########.fr       */
+/*   Updated: 2024/07/24 17:01:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+static void	free_split(char **split)
+{
+	size_t	i;
+
+	i = 0;
+	if (!split)
+		return ;
+	while (split[i])
+		free(split[i++]);
+	free(split);
+}
 
 static char	**unpack_path(t_var *path_var, t_minishell *shell)
 {
@@ -64,20 +76,20 @@ static char	*check_paths(char *cmd_name, char **paths)
 	{
 		tmp = ft_strjoin(paths[i++], "/");
 		if (!tmp)
-			return (NULL);
+			return (free_split(paths), NULL);
 		cmd_path = ft_strjoin(tmp, cmd_name);
 		if (!cmd_path)
-			return (free(tmp), NULL);
-		free(tmp);
+			return (free(tmp), free_split(paths), NULL);
 		if (!access(cmd_path, F_OK))
 		{
 			if (!access(cmd_path, X_OK))
-				return (errno = 0, cmd_path);
-			return (perror(cmd_path), g_shell_stats.prev_exit = 126, NULL);
+				return (free(tmp), free_split(paths), errno = 0, cmd_path);
+			return (perror(cmd_path), free(tmp), free_split(paths),
+				g_shell_stats.prev_exit = 126, NULL);
 		}
-		free(cmd_path);
+		(free(tmp), free(cmd_path));
 	}
-	return (errno = ENOENT, g_shell_stats.prev_exit = 127, NULL);
+	return (free_split(paths), errno = 2, g_shell_stats.prev_exit = 127, NULL);
 }
 
 char	*cmd_find_path(char *cmd_name, t_var *env_list, t_minishell *shell)
