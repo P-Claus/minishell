@@ -6,7 +6,7 @@
 /*   By: efret <efret@student.19.be>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 17:51:54 by efret             #+#    #+#             */
-/*   Updated: 2024/07/24 14:54:49 by marvin           ###   ########.fr       */
+/*   Updated: 2024/07/24 17:07:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	read_here_doc(
 		free(line);
 	else if (!errno)
 		put_here_doc_warning(redir->str);
-	exit(errno);
+	exit_handler(shell, errno);
 }
 
 static void	here_doc_fork(
